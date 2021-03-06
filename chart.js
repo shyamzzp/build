@@ -1,5 +1,6 @@
 // based ready dom, initialize echarts instance 
 var myChart = echarts.init(document.getElementById('main'));
+var myChart2 = echarts.init(document.getElementById('superadminchart'));
 
 // Specify configurations and data graphs 
 var option = {
