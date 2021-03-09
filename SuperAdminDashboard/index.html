@@ -1,0 +1,2476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kakatiya is a leading name in Smart Lighting Controllers and Centralised Control Monitoring System (CCMS) Systems. For more details about our lighting control systems please visit www.natureswitch.com">
+    <meta name="keywords" content="Smart Lighting Controllers, CCMS, Lighting Control Systems, Remote Light Switch, Remote Control Light Switch, GSM Remote Control, Digital Timer, Automatic Light Switch, Automatic Street Light">
+    <meta name="author" content="Kakatiya-Energy-Systems">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="ui2/css/dropdown.css" />
+    <script type="text/javascript" src="ui2/js/dropdown.js"></script>
+    <link href="files/assets/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="popup/jquery.mousewheel-3.0.6.pack.js"></script>
+    <script type="text/javascript" src="source/jquery.fancybox.js?v=2.1.5"></script>
+    <link rel="stylesheet" type="text/css" href="source/jquery.fancybox.css?v=2.1.5" media="screen" />
+
+
+
+    <!-- Add Button helper (this is optional) -->
+    <link rel="stylesheet" type="text/css" href="source/helpers/jquery.fancybox-buttons.css?v=1.0.5" />
+    <script type="text/javascript" src="source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
+
+    <!-- Add Thumbnail helper (this is optional) -->
+    <link rel="stylesheet" type="text/css" href="source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" />
+    <script type="text/javascript" src="source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+
+    <!-- Add Media helper (this is optional) -->
+    <script type="text/javascript" src="source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="popup/style.css" />
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        function drawBackgroundColor() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('date', 'X');
+            data.addColumn('number', 'PV energy (kWh)');
+            data.addColumn('number', 'Lamp energy (kWh)');
+
+            rows = [];
+            for (var i = 0; i < deviceDates.length; i++) {
+                rows.push([new Date(deviceDates[i]), parseFloat(pv_energy[i]), parseFloat(lamp_energy[i])])
+            }
+            data.addRows(rows);
+            var options = {
+                hAxis: {
+                    title: 'Date',
+                    gridlineColor: '#080808',
+                    titleTextStyle: {
+                        bold: true,
+                    }
+                },
+                explorer: null
+                    ,
+                vAxis: {
+                    title: 'Energy (kWh)',
+                    titleTextStyle: {
+                        bold: true,
+                    }
+                },
+                colors: ['#a52714', '#097138'],
+                legend: {
+                    position: 'top'
+                },
+                lineWidth: 5,
+                backgroundColor: '#ffffff',
+                pointShape: "circle",
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
+            chart.draw(data, options);
+        }
+
+        function updatePowerEnergy() {
+            var from_Date = document.getElementById("from_date").value;
+            var to_Date = document.getElementById("to_date").value;
+            if (from_Date == undefined || from_Date == '') {
+                alert("Please select From Date");
+                return;
+            }
+
+            if (to_Date == undefined || to_Date == '') {
+                alert("Please select From Date");
+                return;
+            }
+            var date1 = new Date(from_Date);
+            var date2 = new Date(to_Date);
+            var Difference_In_Time = date2.getTime() - date1.getTime();
+            var Difference_In_Days = (Difference_In_Time / (1000 * 3600 * 24)) + 1;
+            if (Difference_In_Days > 30) {
+                alert("Date range should be max of 30 days.");
+                return;
+            }
+
+            var locId = document.getElementById("selectLocIdsStr").value;
+            if (locId == undefined) {
+                locId = "";
+            }
+            $.ajax({
+                type: 'GET',
+                data: 'selected_loc_ids_string=' + locId + "&fromDate=" + from_Date + "&toDate=" + to_Date,
+                url: 'getPowerEnergyHistory.html',
+                success: function(response) {
+                    var historyData = JSON.parse(response);
+
+                    var uDeviceDates = [];
+                    var uLamp_power = [];
+                    var uBattery_power = [];
+                    var uPv_power = [];
+                    var uPv_energy = [];
+                    var uPeak_pv_power = [];
+                    var uLamp_energy = [];
+
+                    var uData = new google.visualization.DataTable();
+                    uData.addColumn('date', 'X');
+                    uData.addColumn('number', 'PV energy (kWh)');
+                    uData.addColumn('number', 'Lamp energy (kWh)');
+                    var uRows = [];
+                    var uCounter = 0;
+                    historyData.forEach(function(arrayItem) {
+                        uDeviceDates[uCounter] = arrayItem.timeStamp;
+                        uPv_energy[uCounter] = arrayItem.panelEnergy;
+                        uLamp_energy[uCounter] = arrayItem.lampEnergy;
+                        uPeak_pv_power[uCounter] = arrayItem.panelPeakPowerAvg;
+                        uCounter = uCounter + 1;
+                    });
+                    for (var i = 0; i < uDeviceDates.length; i++) {
+                        uRows.push([new Date(uDeviceDates[i]), parseFloat(uPv_energy[i]), parseFloat(uLamp_energy[i])])
+                    }
+                    uData.addRows(uRows);
+                    var uOptions = {
+                        hAxis: {
+                            title: 'Date',
+                            gridlineColor: '#080808',
+                            titleTextStyle: {
+                                bold: true
+                            }
+                        },
+                        explorer: null,
+                        vAxis: {
+                            title: 'Energy (kWh)',
+                            titleTextStyle: {
+                                bold: true
+                            }
+                        },
+                        colors: ['#a52714', '#097138'],
+                        legend: {
+                            position: 'top'
+                        },
+                        lineWidth: 5,
+                        backgroundColor: '#ffffff',
+                        pointShape: "circle",
+                    };
+                    document.getElementById('curve_chart1').value = '';
+                    var uChart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
+                    uChart.draw(uData, uOptions);
+
+                    /** second chart */
+                    var uData2 = new google.visualization.DataTable();
+                    uData2.addColumn('date', 'X');
+                    uData2.addColumn('number', 'Avg of Peak PV Powers (W)');
+
+                    uRows2 = [];
+                    for (var i = 0; i < uDeviceDates.length; i++) {
+                        uRows2.push([new Date(uDeviceDates[i]), parseFloat(uPeak_pv_power[i])]);
+                    }
+                    uData2.addRows(uRows2);
+                    var uOptions2 = {
+                        hAxis: {
+                            title: 'Date',
+                            gridlineColor: '#080808',
+                            titleTextStyle: {
+                                bold: true
+                            }
+                        },
+                        explorer: null,
+                        vAxis: {
+                            title: 'Power (W)',
+                            titleTextStyle: {
+                                bold: true
+                            }
+                        },
+                        colors: ['orange'],
+                        legend: {
+                            position: 'top'
+                        },
+                        lineWidth: 5,
+                        //backgroundColor: '#DFEFF8'
+                        backgroundColor: '#ffffff',
+                        pointShape: "circle",
+                    };
+
+                    document.getElementById('curve_chart2').value = "";
+                    var uChart2 = new google.visualization.LineChart(document.getElementById('curve_chart2'));
+                    uChart2.draw(uData2, uOptions2);
+                },
+                failure: function() {
+                    alert('failure');
+                }
+            });
+        }
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+    </script>
+
+    <script type="text/javascript">
+        function drawBackgroundColor() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('date', 'X');
+            data.addColumn('number', 'Avg of Peak PV Powers (W)');
+
+            rows = [];
+            for (var i = 0; i < deviceDates.length; i++)
+                rows.push([new Date(deviceDates[i]), parseFloat(peak_pv_power[i])])
+            data.addRows(rows);
+            var options = {
+                hAxis: {
+                    title: 'Date',
+                    gridlineColor: '#080808',
+                    titleTextStyle: {
+                        bold: true,
+                    }
+                },
+                explorer: null
+                    ,
+                vAxis: {
+                    title: 'Power (W)',
+                    titleTextStyle: {
+                        bold: true,
+                    }
+                },
+                colors: ['orange'],
+                legend: {
+                    position: 'top'
+                },
+                lineWidth: 5,
+                backgroundColor: '#ffffff',
+                pointShape: "circle",
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
+            chart.draw(data, options);
+        }
+    </script>
+
+    <script type="text/javascript">
+        google.charts.load("current", {
+            packages: ["corechart"]
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var usersData = google.visualization.arrayToDataTable([
+                ['Status', 'Count'],
+                ['Active', 5],
+                ['Inactive', 1],
+                ['Deleted', 1]
+            ]);
+
+            var usersOptions = {
+                title: 'Customers Activity : 7',
+                is3D: false,
+                'colors': ['#109618', '#ff1e00', '#ff9600', '#000000'],
+                'width': 400,
+                'height': 200,
+                legend: {
+                    position: 'labeled'
+                },
+                'backgroundColor': {
+                    'fill': '#FFF',
+                    'opacity': 100
+                },
+                pieSliceText: 'none',
+
+            };
+            var chart1 = new google.visualization.PieChart(document.getElementById('usersActivity'));
+            chart1.draw(usersData, usersOptions);
+
+            var deviceData = google.visualization.arrayToDataTable([
+                ['Status', 'Count'],
+                ['Ready To Supply', 5],
+                ['Supplied', 26],
+                ['Others', 2]
+            ]);
+
+            var deviceOptions = {
+                title: 'Device Activity - Total : 33',
+                is3D: false,
+                'colors': ['#109618', '#ff1e00', '#ff9600', '#000000'],
+                'width': 400,
+                'height': 200,
+                legend: {
+                    position: 'labeled'
+                },
+                'backgroundColor': {
+                    'fill': '#FFF',
+                    'opacity': 100
+                },
+                pieSliceText: 'none',
+
+            };
+            var chart2 = new google.visualization.PieChart(document.getElementById('deviceActivity'));
+            chart2.draw(deviceData, deviceOptions);
+        }
+    </script>
+    <script>
+        function loadPoleData(poleId, databaseCode, customerId) {
+            $('#poleIdDailyStatTable tbody').remove();
+            $.ajax({
+                type: 'GET',
+                async: false,
+                url: "loadSwitchDetails.html",
+                data: "poleId=" + poleId + "" + "&customerId=" + customerId + "" + "&databaseCode=" + databaseCode,
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    //alert(data.SwitchDSBean);
+                    $('#poleId').html(data.SwitchDSBean.poleId);
+                    $('#location').html(data.SwitchDSBean.location);
+                    $('#totalLamps').html(data.SwitchDSBean.totalLamps);
+
+                    $('#poleIdDailyStatTable').append(
+                        $.map(data.SwitchDSBean.dailyStatisticsBean, function(item, index) {
+                            return '<tr>' +
+                                '<td>' + item.lampType + '</td>' +
+                                '<td>' + item.lampWattage + '</td>' +
+                                '<td>' + item.burningLamps + '</td>' +
+                                '<td>' + item.nonBurningLamps + '</td>'
+                            '</tr>';
+                        }).join());
+                    $('#poleIdDailyStatTable tbody').append('<tr class="child">' +
+                        '<td colspan="2" align="right" style="font-weight:bold">Total</td>' +
+                        '<td>' + data.SwitchDSBean.totalBuringLamps + '</td>' +
+                        '<td>' + data.SwitchDSBean.totalNonBuringLamps + '</td>' +
+                        '</tr>'
+
+                        +
+                        '<tr class="child">' +
+                        '<td colspan="3" align="right" style="font-weight:bold">Connected Wattage</td>' +
+                        '<td>' + data.SwitchDSBean.connectedWattage + '</td>' +
+                        '</tr>'
+
+                        +
+                        '<tr class="child">' +
+                        '<td colspan="3" align="right" style="font-weight:bold">Non Burning Wattage</td>' +
+                        '<td>' + data.SwitchDSBean.nonConnectedWattage + '</td>' +
+                        '</tr>');
+                },
+                error: function() {
+                    alert('Error while request..');
+                }
+            });
+            return false;
+        }
+
+        function fancyboxclose() {
+            window.location.reload();
+        }
+
+        function supportiframe() {
+            $.fancybox.open({
+                autoSize: false,
+                autoScale: true,
+                href: 'supportiframe.html',
+                type: 'iframe',
+                padding: 5
+            });
+        }
+    </script>
+    <title>Admin Dashboard</title>
+
+    <!-- Google-Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic' rel='stylesheet'>
+
+    <!-- Bootstrap core CSS -->
+    <link href="files/css/bootstrap.min.css" rel="stylesheet">
+    <link href="files/css/bootstrap-reset.css" rel="stylesheet">
+
+    <!--Animation css-->
+    <link href="files/css/animate.css" rel="stylesheet">
+
+    <!--Icon-fonts css-->
+    <link href="files/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="files/assets/ionicon/css/ionicons.min.css" rel="stylesheet" />
+
+    <!--Morris Chart CSS -->
+    <link rel="stylesheet" href="files/assets/morris/morris.css">
+
+    <!-- sweet alerts -->
+    <link href="files/assets/sweet-alert/sweet-alert.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="files/css/style.css" rel="stylesheet">
+    <link href="files/css/helper.css" rel="stylesheet">
+    <link href="files/css/style-responsive.css" rel="stylesheet" />
+
+
+    <script>
+        //production button s
+
+        //home
+        function changehomeiconup() {
+            $("#homeicon").attr("src", "images/home_ic_selected.png");
+            $("#link1").css("color", "white");
+        }
+
+        function changehomeicondown() {
+            $("#homeicon").attr("src", "images/home_ic_normal.png");
+            $("#link1").css("color", "black");
+        }
+        //chane switch icon
+        function changeswitchicondown() {
+            $("#switchicon").attr("src", "images/switches_selected.png");
+        }
+
+        function changeswitchiconup() {
+            $("#switchicon").attr("src", "images/switches_normal.png");
+        }
+        //changehelp icon down
+        function changehelpicondown() {
+            $("#helpicon").attr("src", "images/help_ic_selected.png");
+        }
+
+        function changehelpiconup() {
+            $("#helpicon").attr("src", "images/help_ic_normal.png");
+        }
+        //changeuser icon
+        function changeusericondown() {
+            $("#usericon").attr("src", "images/user_ic_selected.png");
+        }
+
+        function changeusericonup() {
+            $("#usericon").attr("src", "images/user_ic_normal.png");
+        }
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAArT7ou_E0U1GUzFzx4TEL5P3u51iRcDo&callback=initialize">
+    </script>
+    <link rel="stylesheet" href="css/style-print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="css/style-print.css" type="text/css" media="print" />
+
+    <script type="text/javascript">
+        function expand(id) {
+            //alert("alert"+id);
+            $('#' + id + 'exp').toggle();
+        }
+
+
+        function doAjaxPost() {
+            var gid = $("#groupID").val();
+            var gname = $("#groupName").val();
+            var remarks = $('#remarks').val();
+            if (gname.length == 0 || gname.length > 15) {
+                $('#groupName').removeClass("textbox");
+                $('#groupName').addClass("errorbox");
+                document.getElementById("errorname").innerHTML = "&nbsp; &nbsp; Please Enter Valid Group name";
+                return;
+            } else {
+                $('#groupName').removeClass("errorbox");
+                $('#groupName').addClass("textbox");
+                document.getElementById("errorname").innerHTML = "";
+            }
+            if (remarks.match(/[^a-zA-Z]/g) || remarks.length == 0) {
+                $('#remarks').removeClass("textbox");
+                $('#remarks').addClass("errorbox");
+                document.getElementById("errorremark").innerHTML = "&nbsp; &nbsp; Please Enter Valid Group name";
+                return;
+            } else {
+                $('#remarks').removeClass("errorbox");
+                $('#remarks').addClass("textbox");
+                document.getElementById("errorremark").innerHTML = "";
+            }
+            $.ajax({
+                type: 'GET',
+                async: false,
+                url: "checkGroupUnique.html",
+                data: "groupName=" + gname,
+                success: function(response) {
+                    if (response == "success") {
+                        $.ajax({
+                            type: 'POST',
+                            url: "addGroup.html",
+                            data: "groupName=" + gname + "&remarks=" + remarks + "&groupID=" + gid,
+                            success: function(response) {
+                                window.location.reload();
+                            },
+                            error: function(response) {
+                                alert("check Internet connection Errorrrrr" + response);
+                            }
+                        });
+                        document.getElementById("groupnameexist").innerHTML = "";
+                    } else {
+                        document.getElementById("groupnameexist").innerHTML = "Group Name Already Exist";
+                        return;
+                    }
+                },
+                error: function(response) {
+                    alert("Errorrrrr" + response);
+                }
+            });
+        }
+
+        $(document).ready(
+            function() {
+                /*
+                 *  Simple image gallery. Uses default settings
+                 */
+
+                $('.fancybox').fancybox({
+                    beforeClose: function() {}
+                });
+
+                /*
+                 *  Different effects
+                 */
+
+                // Change title type, overlay closing speed
+                $(".fancybox-effects-a").fancybox({
+                    helpers: {
+                        title: {
+                            type: 'outside'
+                        },
+                        overlay: {
+                            speedOut: 0
+                        }
+                    }
+                });
+
+                // Disable opening and closing animations, change title type
+                $(".fancybox-effects-b").fancybox({
+                    openEffect: 'none',
+                    closeEffect: 'none',
+
+                    helpers: {
+                        title: {
+                            type: 'over'
+                        }
+                    }
+                });
+
+                // Set custom style, close if clicked, change title type and overlay color
+                $(".fancybox-effects-c").fancybox({
+                    wrapCSS: 'fancybox-custom',
+                    closeClick: true,
+
+                    openEffect: 'none',
+
+                    helpers: {
+                        title: {
+                            type: 'inside'
+                        },
+                        overlay: {
+                            css: {
+                                'background': 'rgba(238,238,238,0.85)'
+                            }
+                        }
+                    }
+                });
+
+                // Remove padding, set opening and closing animations, close if clicked and disable overlay
+                $(".fancybox-effects-d").fancybox({
+                    padding: 0,
+
+                    openEffect: 'elastic',
+                    openSpeed: 150,
+
+                    closeEffect: 'elastic',
+                    closeSpeed: 150,
+
+                    closeClick: true,
+
+                    helpers: {
+                        overlay: null
+                    }
+                });
+
+                /*
+                 *  Button helper. Disable animations, hide close button, change title type and content
+                 */
+
+                $('.fancybox-buttons')
+                    .fancybox({
+                        openEffect: 'none',
+                        closeEffect: 'none',
+
+                        prevEffect: 'none',
+                        nextEffect: 'none',
+
+                        closeBtn: false,
+
+                        helpers: {
+                            title: {
+                                type: 'inside'
+                            },
+                            buttons: {}
+                        },
+
+                        afterLoad: function() {
+                            this.title = 'Image ' +
+                                (this.index + 1) +
+                                ' of ' +
+                                this.group.length +
+                                (this.title ? ' - ' +
+                                    this.title : '');
+                        }
+                    });
+
+                /*
+                 *  Thumbnail helper. Disable animations, hide close button, arrows and slide to next gallery item if clicked
+                 */
+
+                $('.fancybox-thumbs').fancybox({
+                    prevEffect: 'none',
+                    nextEffect: 'none',
+
+                    closeBtn: false,
+                    arrows: false,
+                    nextClick: true,
+
+                    helpers: {
+                        thumbs: {
+                            width: 50,
+                            height: 50
+                        }
+                    }
+                });
+
+                /*
+                 *  Media helper. Group items, disable animations, hide arrows, enable media and button helpers.
+                 */
+                $('.fancybox-media').attr('rel', 'media-gallery').fancybox({
+                    openEffect: 'none',
+                    closeEffect: 'none',
+                    prevEffect: 'none',
+                    nextEffect: 'none',
+
+                    arrows: false,
+                    helpers: {
+                        media: {},
+                        buttons: {}
+                    }
+                });
+
+                /*
+                 *  Open manually
+                 */
+
+                $("#fancybox-manual-a").click(function() {
+                    $.fancybox.open('1_b.jpg');
+                });
+
+                $("#fancybox-manual-b").click(function() {
+                    $.fancybox.open({
+                        href: 'iframe.html',
+                        type: 'iframe',
+                        padding: 5
+                    });
+                });
+
+                $("#fancybox-manual-c").click(function() {
+                    $.fancybox.open([{
+                        href: '1_b.jpg',
+                        title: 'My title'
+                    }, {
+                        href: '2_b.jpg',
+                        title: '2nd title'
+                    }, {
+                        href: '3_b.jpg'
+                    }], {
+                        helpers: {
+                            thumbs: {
+                                width: 75,
+                                height: 50
+                            }
+                        }
+                    });
+                });
+
+            });
+    </script>
+    <script>
+        $(document).ready(function() {
+            var guest_customer = "";
+            if (guest_customer.length == 0) {
+                //alert("guest customer");
+
+                //alert(document.cookie);
+
+                $('#instruct').remove();
+                $('#main').show();
+
+
+            }
+
+            /* var stickyNavTop = $('.nav').offset().top;
+
+            var stickyNav = function() {
+                var scrollTop = $(window).scrollTop();
+
+                if (scrollTop > stickyNavTop) {
+                    $('.nav').addClass('sticky');
+                } else {
+                    $('.nav').removeClass('sticky');
+                }
+            };
+
+            stickyNav();
+
+            $(window).scroll(function() {
+                stickyNav();
+            }); */
+        });
+    </script>
+    <script>
+        //Dashboard settings
+        function saveDashboardSettings() {
+            var previouskWh = document.getElementById("previouskwh").value;
+            var unitPrice = document.getElementById("unitprice").value;
+            var co2 = document.getElementById("co2").value;
+            $.ajax({
+                type: "POST",
+                url: "saveDashboardSettings.html",
+                data: "previouskwh=" + previouskWh + "&unitprice=" + unitPrice + "&co2=" + co2,
+                success: function(response) {
+                    if (response == "success") {
+                        document.getElementById("dashboardsavesuccess").innerHTML = "Settings Saved succesfully";
+                        $.fancybox({
+                            href: "#dashboardsavesuccess"
+                        }).click();
+                    } else {
+                        document.getElementById("dashboardsavefailure").innerHTML = "Sorry Failed to Save Settings";
+                        $.fancybox({
+                            href: "#dashboardsavefailure"
+                        }).click();
+                    }
+                },
+                error: function(response) {
+                    alert('Error: ' + response);
+                }
+            });
+        }
+
+        //changepassword
+        function changepassword() {
+            var oldpassword = document.getElementById("oldpassword").value;
+            var password1 = document.getElementById("changepassword1").value;
+            var password2 = document.getElementById("changepassword2").value;
+            if (password1.length < 6 || password1 != password2) {
+                $('#oldpassword').removeClass("textbox");
+                $('#oldpassword').addClass("errorbox");
+                $('#changepassword1').removeClass("textbox");
+                $('#changepassword1').addClass("errorbox");
+                $('#changepassword2').removeClass("textbox");
+                $('#changepassword2').addClass("errorbox");
+                document.getElementById("errorchangepasswordmain").innerHTML = "Invalid Password";
+            } else {
+                $('#oldpassword').removeClass("errorbox");
+                $('#oldpassword').addClass("textbox");
+                $('#changepassword1').removeClass("errorbox");
+                $('#changepassword1').addClass("textbox");
+                $('#changepassword2').removeClass("errorbox");
+                $('#changepassword2').addClass("textbox");
+                document.getElementById("errorchangepasswordmain").innerHTML = "";
+                var guest_customer = "";
+                if (guest_customer.length != 0) {
+                    $.fancybox({
+                        href: "#deletefailure_guestcustomer",
+                    }).click();
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "changepassword.html",
+                    data: "oldpassword=" + oldpassword + "&password=" + password1,
+                    success: function(response) {
+                        if (response == "success") {
+                            document.getElementById("changepasswordsuccess").innerHTML = "Password changed succesfully";
+                            $.fancybox({
+                                href: "#changepasswordsuccess"
+                            }).click();
+                        } else {
+                            document.getElementById("changepasswordfailure").innerHTML = "Sorry Mismatch in older password";
+                            $.fancybox({
+                                href: "#changepasswordfailure"
+                            }).click();
+                        }
+                    },
+                    error: function(response) {
+                        alert('Error: ' + response);
+                    }
+                });
+            }
+
+        }
+
+        function validateoldpassword() {
+            var password1 = document.getElementById("oldpassword").value;
+            if (password1.length < 6) {
+                $('#oldpassword').removeClass("textbox");
+                $('#oldpassword').addClass("errorbox");
+                document.getElementById("erroroldpassword").innerHTML = "Minimum 6 characters";
+            } else {
+                $('#oldpassword').removeClass("errorbox");
+                $('#oldpassword').addClass("textbox");
+                document.getElementById("erroroldpassword").innerHTML = "";
+            }
+
+        }
+
+        function validatepassword() {
+            var password1 = document.getElementById("changepassword1").value;
+            if (password1.length < 6) {
+                $('#changepassword1').removeClass("textbox");
+                $('#changepassword1').addClass("errorbox");
+                document.getElementById("errorchangepassword1").innerHTML = "Minimum 6 characters";
+            } else {
+                $('#changepassword1').removeClass("errorbox");
+                $('#changepassword1').addClass("textbox");
+                document.getElementById("errorchangepassword1").innerHTML = "";
+            }
+
+        }
+
+        function validateretypepassword() {
+            var password1 = document.getElementById("changepassword1").value;
+            var password2 = document.getElementById("changepassword2").value;
+            if (password1 != password2) {
+                $('#changepassword2').removeClass("textbox");
+                $('#changepassword2').addClass("errorbox");
+                document.getElementById("errorchangepassword2").innerHTML = "Password Mismatch";
+            } else {
+                $('#changepassword2').removeClass("errorbox");
+                $('#changepassword2').addClass("textbox");
+                document.getElementById("errorchangepassword2").innerHTML = "";
+            }
+        }
+    </script>
+    <script>
+        function showhomepage() {
+            $('#instruct').remove();
+
+            $('#main').show();
+            $.fancybox({
+                href: "#pagehelp",
+            }).click();
+
+        }
+    </script>
+    <script>
+        var markerLat, markerLong, imei, imsi, phone_number, address, lampStatus, pole_id_array, filterType, powerEnergy;
+        //lightStatus = ["LIGHTS ON", "LIGHTS OFF", "LIGHTS ON", "LIGHTS OFF"];
+        filterType = "";
+        pole_id_array = [];
+        markerLat = [];
+        markerLong = [];
+        lampStatus = [];
+        healthStatus = [];
+        markers = [];
+
+        //var map;
+        function initialize() {
+            var initlatlng = new google.maps.LatLng(markerLat[0], markerLong[0]);
+            var mapOptions = {
+                zoom: 5,
+                center: new google.maps.LatLng(17.3840500, 78.4563600),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
+            var bounds = new google.maps.LatLngBounds();
+            var infowindow = new google.maps.InfoWindow();
+            var marker, i;
+            var catIcon;
+
+            // Loop through the results array and place a marker for each
+            // set of coordinates.
+
+
+
+            for (i = 0; i < markerLat.length; i++) {
+                //  var coords = results.features[i].geometry.coordinates
+
+                if (filterType != null && filterType == 'health status') {
+
+                    if (healthStatus[i] == 'HEALTHY') {
+                        catIcon = 'green.png';
+                    } else if (healthStatus[i] == 'ONLY PANEL ALARM') {
+                        catIcon = 'blue.png';
+                    } else if (healthStatus[i] == 'ONLY LAMP ALARM') {
+                        catIcon = 'red.png';
+                    } else if (healthStatus[i] == 'ONLY BATTERY ALARM') {
+                        catIcon = 'orange.png';
+                    } else if (healthStatus[i] == 'ONLY BOARD ALARM') {
+                        catIcon = 'yellow.png';
+                    } else if (healthStatus[i] == 'MULTIPLE ALARMS') {
+                        catIcon = 'mntc.png';
+                    } else if (healthStatus[i] == 'OFFLINE') {
+                        catIcon = 'black.png';
+                    }
+                } else {
+
+                    if (lampStatus[i] == 'ON') {
+                        catIcon = 'green.png';
+                    } else if (lampStatus[i] == 'OFF') {
+                        catIcon = 'red.png';
+                    } else if (lampStatus[i] == 'DIMM') {
+                        catIcon = 'orange.png';
+                    } else if (lampStatus[i] == 'OFFLINE') {
+                        catIcon = 'black.png';
+                    }
+                }
+
+
+
+                var icon = {
+                    url: 'images/' + catIcon, // url
+                    scaledSize: new google.maps.Size(20, 20), // scaled size
+
+                };
+
+                marker = new google.maps.Marker({ //markerLat[0],markerLong[0])
+                    position: new google.maps.LatLng(markerLat[i], markerLong[i]),
+                    map: map,
+                    icon: icon,
+                    //  category:lampStatus[i],
+
+                });
+                //  alert(markerLat[i]+" , "+markerLong[i]);
+                markers.push(marker);
+
+                bounds.extend(marker.position);
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+
+                        infowindow.setContent('<div style="height:auto; width: 200px;font-weight:700px;font-size:12px; text-align:left;">' +
+                            '<a style="font-weight:700; font-size:12px; color:blue;" href="configurationSettings.html?deviceId=' + pole_id_array[i] + '";>' +
+                            '<span style="font-weight:700; font-size:11px;">Device ID :' + pole_id_array[i] + '</span></a><br>' +
+                            '<span style="font-weight:700; font-size:11px;">Lamp Status :' + lampStatus[i] + '</span><br>' +
+                            '<span style="font-weight:700; font-size:11px;">Health Status :' + healthStatus[i] + '</span><br>' +
+                            '<span style="font-weight:700; font-size:11px;     color: #0037ff; "><a href=" http://www.google.com/maps/search/' + markerLat[i] + ',' + markerLong[i] + '" target="_blank" style="color:blue;">Navigate Location</a></span><br>' +
+
+
+
+
+                            '</div>');
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
+            map.fitBounds(bounds);
+            var listener = google.maps.event.addListener(map, "idle", function() {
+                var zoomlevel = map.getZoom();
+                if (zoomlevel > 15)
+                    map.setZoom(15);
+                google.maps.event.removeListener(listener);
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+        function Markers(supp) {
+            if (document.getElementById(supp).checked == false) { // hide the marker
+                for (var i = 0; i < markers.length; i++) {
+                    if (supplier[i] == supp) {
+                        markers[i].setVisible(false);
+                    }
+                }
+            } else { // show the marker again
+                for (var i = 0; i < markers.length; i++) {
+                    if (supplier[i] == supp) {
+                        markers[i].setVisible(true);
+                    }
+                }
+            }
+
+        }
+        /* filterMarkers = function(category) {
+        var newmarkers = [];
+        for (i = 0; i < markers.length; i++) {
+          marker = markers[i];
+          // If is same category or category not picked
+          if (marker.category == category || (category == 'network' && (marker.category == 'networkon' || marker.category == 'networkoff')) || (marker.category == 'networkon' && category == 'ccmson') || (marker.category == 'networkoff' && category == 'ccmsoff') || category.length === 0) {
+            marker.setVisible(true);
+            newmarkers.push(marker);
+          }
+          // Categories don't match 
+          else {
+            marker.setVisible(false);
+            
+          }
+        }
+
+      }
+      
+      clearfilterMarkers = function(category) {
+          var newmarkers = [];
+          for (i = 0; i < markers.length; i++) {
+            marker = markers[i];
+            marker.setVisible(true);
+          }
+
+      
+    } */
+    </script>
+
+
+
+    <style>
+        .table-striped>tbody>tr:nth-of-type(odd) {
+            background-color: #ebebeb;
+        }
+
+        table.dataTable thead th,
+        table.dataTable thead td {
+            padding: 10px 10px;
+        }
+
+        table {
+            border: 0.1px solid #000;
+        }
+
+        #chart_wrap {
+            position: relative;
+            padding-bottom: 75%;
+            height: 0;
+            overflow: hidden;
+            box-shadow: 6px 7px 11px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        #chart_div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: 6px 7px 11px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        #chart_div2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: 6px 7px 11px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        #chart_div3 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: 6px 7px 11px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        }
+
+        /* The Modal (background) */
+
+        .s-modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            padding-top: 100px;
+            /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content */
+
+        .s-modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            height: 400px;
+            overflow-y: scroll;
+            padding: 0;
+            border: 1px solid #888;
+            width: 85%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+
+        @media (min-width: 1200px) {
+            .col-lg-2 {
+                width: 19.6%;
+            }
+            /* Add Animation */
+            @ -webkit-keyframes animatetop {
+                from {
+                    top: -300px;
+                    opacity: 0
+                }
+                to {
+                    top: 0;
+                    opacity: 1
+                }
+            }
+            @ keyframes animatetop {
+                from {
+                    top: -300px;
+                    opacity: 0
+                }
+                to {
+                    top: 0;
+                    opacity: 1
+                }
+            }
+            /* The Close Button */
+            .close {
+                color: black;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            .s-modal-header {
+                padding: 2px 16px;
+                background-color: #5cb85c;
+                color: white;
+            }
+            .s-modal-body {
+                padding: 2px 16px;
+            }
+            .s-modal-footer {
+                padding: 2px 16px;
+                background-color: #5cb85c;
+                color: white;
+            }
+            .sticky {
+                position: fixed;
+                width: 100%;
+                left: 0;
+                top: 0;
+                z-index: 100;
+                border-top: 0;
+            }
+            .searchbox {
+                border: 1px solid #c4c4c4;
+                height: 22px;
+                width: 275px;
+                font-size: 13px;
+                padding: 4px 4px 4px 4px;
+                border-radius: 1px;
+                -moz-border-radius: 4px;
+                -webkit-border-radius: 4px;
+                box-shadow: 0px 0px 8px #d9d9d9;
+                -moz-box-shadow: 0px 0px 8px #d9d9d9;
+                -webkit-box-shadow: 0px 0px 8px #d9d9d9;
+            }
+            .textbox {
+                border: 1px solid #c4c4c4;
+                height: 25px;
+                width: 275px;
+                font-size: 13px;
+                padding: 4px 4px 4px 4px;
+                border-radius: 10px;
+                -moz-border-radius: 4px;
+                -webkit-border-radius: 4px;
+                box-shadow: 0px 0px 8px #d9d9d9;
+                -moz-box-shadow: 0px 0px 8px #d9d9d9;
+                -webkit-box-shadow: 0px 0px 8px #d9d9d9;
+            }
+            .textbox:focus {
+                outline: none;
+                border: 1px solid #7bc1f7;
+                box-shadow: 0px 0px 8px #7bc1f7;
+                -moz-box-shadow: 0px 0px 8px #7bc1f7;
+                -webkit-box-shadow: 0px 0px 8px #7bc1f7;
+            }
+            navbar-nav a:hover {
+                color: #000000;
+            }
+    </style>
+
+    <style>
+        .show1,
+        .show2,
+        .show4,
+        .show5,
+        .show6,
+        .show7 {
+            display: none;
+        }
+
+        #map-canvas {
+            box-shadow: 1px 2px 18px rgba(0, 0, 0, 0.45);
+            width: 95%;
+            margin-left: 25px;
+            height: 500px;
+        }
+    </style>
+    <style>
+        .scroll {
+            overflow-x: scroll;
+            overflow-y: hidden;
+        }
+
+        .slidecontainer {
+            width: 100%;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20em;
+            height: 1em;
+            background: #2C4461;
+            outline: none;
+            margin-top: 2em;
+            border-radius: 1em;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            border-radius: 50%;
+            width: 1.5em;
+            height: 1.5em;
+            background: #BAC5D2;
+        }
+
+        .fa-check {
+            color: green;
+        }
+
+        .fa-remove {
+            color: red;
+        }
+    </style>
+    <style>
+        .instruction {
+            margin-top: 2%;
+            margin-left: 25%;
+            margin-bottom: 2%;
+            width: 50%;
+            height: 50%;
+            border: medium;
+            background-color: #4f81bd;
+            font-weight: bold;
+            color: white;
+        }
+
+        .instructionfancy {
+            margin-left: 25%;
+            width: 50%;
+            height: 120%;
+            border: medium;
+            background-color: #4f81bd;
+            font-weight: bold;
+            color: white;
+        }
+
+        .para1 {
+            text-align: left;
+            padding-top: 15px;
+            margin-left: 20px;
+            margin-right: 20px;
+            color: white;
+        }
+
+        .para2 {
+            text-align: left;
+            margin-left: 20px;
+            margin-right: 20px;
+            color: white;
+        }
+
+        .para3 {
+            text-align: left;
+            margin-left: 20px;
+            margin-right: 20px;
+            color: white;
+            padding-bottom: 15px;
+        }
+
+        .lists {
+            text-align: left;
+            margin-left: 20px;
+            margin-right: 20px;
+            color: white;
+        }
+
+        .data {
+            text-align: left;
+            margin-left: 20px;
+            margin-right: 20px;
+            color: white;
+        }
+    </style>
+
+    <style>
+        .btn-arrow-right {
+            position: relative;
+            padding-right: 18px;
+        }
+
+        .btn-arrow-right {
+            padding-left: 36px;
+        }
+
+        .btn-arrow-right:before,
+        .btn-arrow-right:after {
+            /* make two squares (before and after), looking similar to the button */
+            content: "";
+            position: absolute;
+            top: 5px;
+            /* move it down because of rounded corners */
+            width: 22px;
+            /* same as height */
+            height: 22px;
+            /* button_outer_height / sqrt(2) */
+            background: inherit;
+            /* use parent background */
+            border: inherit;
+            /* use parent border */
+            border-left-color: transparent;
+            /* hide left border */
+            border-bottom-color: transparent;
+            /* hide bottom border */
+            border-radius: 0px 4px 0px 0px;
+            /* round arrow corner, the shorthand property doesn't accept "inherit" so it is set to 4px */
+            -webkit-border-radius: 0px 4px 0px 0px;
+            -moz-border-radius: 0px 4px 0px 0px;
+        }
+
+        .btn-arrow-right:before,
+        .btn-arrow-right:after {
+            transform: rotate(45deg);
+            /* rotate right arrow squares 45 deg to point right */
+            -webkit-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+        }
+
+        .btn-arrow-right:before {
+            /* align the "before" square to the left */
+            left: -11px;
+        }
+
+        .btn-arrow-right:after {
+            /* align the "after" square to the right */
+            right: -11px;
+        }
+
+        .btn-arrow-right:after {
+            /* bring arrow pointers to front */
+            z-index: 1;
+        }
+
+        .btn-arrow-right:before {
+            /* hide arrow tails background */
+            background-color: white;
+        }
+    </style>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+    <!--[if lt IE 9]>
+  <script src="js/html5shiv.js"></script>
+  <script src="js/respond.min.js"></script>
+<![endif]-->
+
+
+</head>
+
+
+<body>
+    <div id="myModal" class="modal" style=" font-size: 12px; top: 90px;">
+        <span class="fancybox-close" style="position: absolute;
+    top: 3px;
+    right: 119px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    z-index: 8040;">&times;</span>
+
+        <!-- Modal content -->
+        <div class="s-modal-content">
+
+            <div id="title" style="color:green"></div>
+            <div id="networkfailure"></div>
+
+        </div><br></br>
+
+    </div>
+    <!-- Aside Start-->
+    <aside class="left-panel" style="background:#176498;">
+
+        <!DOCTYPE html>
+        <html>
+
+        <head>
+            <meta charset="ISO-8859-1">
+            <!-- <meta http-equiv="refresh" content="120"/> -->
+            <title>Insert title here</title>
+            <style type="text/css">
+                .center {
+                    display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                    width: 50%;
+                }
+            </style>
+        </head>
+
+        <body>
+            <div class="logo">
+
+                <a href="homepage.html"><img src="ui3/assets/images/philips-logo.png" class="center" alt="logo"/></a>
+                <br>
+                <p style="text-align: center; color: white; font-weight: 700; font-size:0.8vw;">Solar Lighting<br>Management System</p>
+                <!--  <p style="color: white; text-align: center; font-size: 11px;"> Role : SUPER ADMIN</p>
+                    <p style="color: white; text-align: center; font-size: 11px;"> Scope : View And Control</p>
+                    <p style="color: white; text-align: center; font-size: 11px;"> Name : Super Admin</p> -->
+                <!--  <p style="color: white; text-align: center; font-size: 11px;"> superadmin@gmail.com</p> -->
+
+            </div>
+            <nav class="navigation">
+                <ul class="list-unstyled">
+
+
+
+
+                    <li class="active">
+                        <a href="adminHomePage.html">
+								<i class="fa fa-dashboard"></i> 
+								<span class="nav-label">Admin Board</span>
+							</a>
+                    </li>
+                    <li class=""><a href="customersView.html?size=10"><i class="fa fa-user"></i> <span class="nav-label">Customers</span></a>
+                    </li>
+
+                    <!-- <li class=""><a href="GetDeleteCustomersDetails.html"><i class="ion-trash-a"></i> <span class="nav-label">Deleted Customers</span></a>
+	                    </li> -->
+                    <li class=""><a href="getAllDevicesInfo.html?size=10"><i class="ion-lightbulb"></i> <span class="nav-label">Devices</span></a>
+                    </li>
+                    <li class=""><a href="getLogActivities.html?size=10"><i class="fa fa-history"></i> <span class="nav-label">Log Activities</span></a>
+                    </li>
+                    <li class=""><a href="phoneNumbersView.html"><i class="fa fa-mobile"></i> <span class="nav-label">Phone Numbers</span></a></li>
+
+                    <!-- 
+						<li class="" ><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Please Select Any Customer"><i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard</span></a>
+						</li>
+						<li class="" ><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Please Select Any Customer"><i class="fa fa-users"></i> <span class="nav-label">Groups/Users</span></a>
+						</li>
+						<li class="" ><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Please Select Any Customer"><i class="ion-flag"></i> <span class="nav-label">Live Data</span></a>
+						</li>
+						<li class="" ><a href="#" data-toggle="tooltip" data-placement="top" data-original-title="Please Select Any Customer"><i class="ion-settings"></i> <span class="nav-label">Control Settings</span></a>
+						</li>
+					 -->
+
+
+
+
+
+                </ul>
+            </nav>
+        </body>
+
+        </html>
+
+    </aside>
+    <!-- Aside Ends-->
+
+
+    <!--Main Content Start -->
+    <section class="content">
+
+        <!-- Header -->
+        <header class="top-head container-fluid" style="margin: 0 0 -9px; height:63px;">
+            <button type="button" class="navbar-toggle pull-left">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            <!-- Search -->
+
+
+            <!-- Left navbar -->
+            <nav class=" navbar-default hidden-xs" role="navigation">
+
+
+
+
+
+
+
+                <div style="display:inline-table;" id="level0">
+
+                </div>
+
+                <div style="display:inline-table;" id="level2">
+
+                </div>
+                <div style="display:inline-table;" id="level3">
+
+                </div>
+
+                <div style="display:inline-table;" id="level4">
+
+
+                </div>
+                <div style="display:inline-table;" id="level5">
+
+
+                </div>
+
+                <!-- Right navbar -->
+                <ul class="list-inline navbar-right top-menu top-right-menu">
+
+                    <!-- user login dropdown start-->
+
+                    <li class="dropdown text-center">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <img alt="" src="files/img/avatar-2.jpg" class="img-circle profile-img thumb-sm">
+                            <span class="username">Super Admin </span> <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu extended pro-menu fadeInUp animated" tabindex="5003" style="overflow: hidden; outline: none;">
+                            <li style="text-transform: capitalize"><a href="" style="cursor:default;"><b>Role:</b> super admin</a></li>
+                            <li><a href="" style="cursor:default;"><b>Scope:</b> View And Control</a></li>
+                            <li><a onclick="SelfEditUserDetailsIframe();"><i class="fa fa-briefcase"></i>Edit Profile</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#support"><i class="ion-help-buoy"></i> Support</a></li>
+                            <li><a href="signout.html"><i class="fa fa-sign-out"></i>Log Out</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- user login dropdown end -->
+                </ul>
+                <!-- End right navbar -->
+            </nav>
+
+
+        </header>
+
+
+        <div class="panel panel-default" style="margin: -8px 0 24px;padding: 16px 25px 17px 15px;;">
+            <div class="row">
+                <div class="col-sm-4">
+                    <p style="margin: -9px;float: left;">
+                        Super Admin/
+                    </p>
+                </div>
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-4" style="float:right;">
+
+                    <p style='margin: -9px;float: right;'>&nbsp;&nbsp;Status As On : 09-Mar-2021 05:05:39 AM</p>
+
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="row">
+        </div>
+        <div class="row" style="margin-bottom: 15px;">
+            <div class="col-md-3" style="padding-left: 44px; height: 100px;">
+                <div class="widget-panel widget-style-2 bg-pink" style="padding: 5px; background-color: #176498c9; height: 100px;">
+                    <p align="center" style="font-weight:600; font-size:20px; padding-top: 10px;">Total Customers</p>
+                    <p align="center" style="font-weight:600; font-size:14px;">
+                        <span style="float:center; font-size: 30px;">
+		                                7
+		                             </span>
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left: 44px; height: 100px;">
+                <div class="widget-panel widget-style-2 bg-pink" style="padding: 5px; background-color: #176498c9; height: 100px;">
+                    <p align="center" style="font-weight:600; font-size:20px; padding-top: 10px;">Active Customers</p>
+                    <p align="center" style="font-weight:600; font-size:14px;">
+                        <span style="float:center; font-size: 30px;">
+		                                5
+		                             </span>
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left: 44px; height: 100px;">
+                <div class="widget-panel widget-style-2 bg-pink" style="padding: 5px; background-color:#0b578af0; height: 100px;">
+                    <p align="center" style="font-weight:600; font-size:20px; padding-top: 10px;">Inactive Customers</p>
+                    <p align="center" style="font-weight:600; font-size:14px;">
+                        <span style="float:center; font-size: 30px;">
+		                                1
+		                             </span>
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left: 44px; height: 100px;">
+                <div class="widget-panel widget-style-2 bg-pink" style="padding: 5px; background-color: #0a4973; height: 100px;">
+                    <p align="center" style="font-weight:600; font-size:20px; padding-top: 10px;">Deleted Customers</p>
+                    <p align="center" style="font-weight:600; font-size:14px;">
+                        <span style="float:center; font-size: 30px;">
+		                                1
+		                             </span>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3" style="padding-left: 44px; height: 100px;">
+                <div class="widget-panel widget-style-2 bg-pink" style="padding: 5px; background-color: #ff0046cc; height: 100px;">
+                    <p align="center" style="font-weight:600; font-size:20px; padding-top: 10px;">Total Devices</p>
+                    <p align="center" style="font-weight:600; font-size:14px;">
+                        <span style="float:center; font-size: 30px;">
+		                                33
+		                             </span>
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left: 44px; height: 100px;">
+                <div class="widget-panel widget-style-2 bg-pink" style="padding: 5px; background-color: #ff0046cc; height: 100px;">
+                    <p align="center" style="font-weight:600; font-size:20px; padding-top: 10px;">Ready To Supply</p>
+                    <p align="center" style="font-weight:600; font-size:14px;">
+                        <span style="float:center; font-size: 30px;">
+		                                5
+		                             </span>
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left: 44px; height: 100px;">
+                <div class="widget-panel widget-style-2 bg-pink" style="padding: 5px; background-color: #ff0046cc; height: 100px;">
+                    <p align="center" style="font-weight:600; font-size:20px; padding-top: 10px;">Supplied</p>
+                    <p align="center" style="font-weight:600; font-size:14px;">
+                        <span style="float:center; font-size: 30px;">
+		                                26
+		                             </span>
+                    </p>
+
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left: 44px; height: 100px;">
+                <div class="widget-panel widget-style-2 bg-pink" style="padding: 5px; background-color: #ff0046cc; height: 100px;">
+                    <p align="center" style="font-weight:600; font-size:20px; padding-top: 10px;">Other Devices</p>
+                    <p align="center" style="font-weight:600; font-size:14px;">
+                        <span style="float:center; font-size: 30px;">
+		                                2
+		                             </span>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 15px;">
+            <div class="col-md-6">
+                <div id="usersActivity" style="border:1px solid lightgrey;border-radius: 0px;box-shadow:0px 2px 20px rgba(0, 0, 0, 0.20);padding: 16px 41px;margin: 0 31px;"></div>
+            </div>
+            <div class="col-md-6">
+                <div id="deviceActivity" style="border:1px solid lightgrey;border-radius: 0px;box-shadow:0px 2px 20px rgba(0, 0, 0, 0.20);padding: 16px 41px;margin: 0 31px;"></div>
+            </div>
+        </div>
+
+
+        <!-- <div id="myDIV" style="padding:0 50px 0 44px;">
+                 id="googleMap     map-canvas"
+                 <a name="anchor-point-1"></a>
+                 <br><br>
+                 <a name="map" id="map"> </a>
+                <div id="googleMap" style=" box-shadow: 1px 2px 18px rgba(0, 0, 0, 0.45);  width: 100%; height: 300px; margin-left: 1px; "></div>
+                    </div> -->
+        <!-- Page Content Start -->
+        <!-- ================== -->
+
+
+
+
+        <div class="row">
+            <div id="info" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; overflow-y: auto;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <!-- <input type="button" onclick="tableToExcel('poleIdDailyStatTable', 'Switch Id DailyStatistics ')" value="Export to Excel"> -->
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+
+                                    <div class="table-responsive">
+                                        <table id="poleIdDailyStatTable" class="table table-striped table-bordered " style="font-size: 12px; color: black;">
+
+                                            <tbody>
+                                                <tr style="font-weight: 700;">
+                                                    <td>Pole No</td>
+                                                    <td colspan="3" style="text-align: left;" id="poleId"></td>
+                                                </tr>
+                                                <tr style="font-weight: 700;">
+                                                    <td>Location</td>
+                                                    <td colspan="3" style="text-align: left;" id="location"></td>
+                                                </tr>
+                                                <tr style="font-weight: 700;">
+                                                    <td>Total Lamps</td>
+                                                    <td colspan="3" style="text-align: left;" id="totalLamps"></td>
+                                                </tr>
+
+
+                                                <tr style="font-weight: 700;">
+                                                    <td>Lamps Type</td>
+                                                    <td>Wattage</td>
+                                                    <td>Burning Lamps</td>
+                                                    <td>Non Burning Lamps</td>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        </div>
+        </div>
+
+
+
+
+        <!-- Page Content Ends -->
+        <!-- ================== -->
+
+        <!-- Custom Modals -->
+        <div id="dashboardsavesuccess" style="display: none; height: 50px; width: 500px; text-align: center; margin-top: 30px"></div>
+        <div id="dashboardsavefailure" style="display: none; height: 50px; width: 500px; text-align: center; margin-top: 30px"></div>
+
+        <div class="row">
+            <div class="col-md-12">
+
+
+                <div id="dashboardsettings" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title" id="custom-width-modalLabel">Dashboard Settings</h4>
+                            </div>
+                            <form class="form-horizontal" role="form">
+                                <br><br>
+                                <div class="form-group">
+                                    <label onkeypress='validate(event)' class="col-sm-3 control-label">Enter Previous kWh</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="previouskwh" autocomplete="off" placeholder="Enter Previous KWh" value='0.0' class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Enter Unit Price</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" autocomplete="off" id="unitprice" placeholder="unit price" value='6.25' class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">CO<sub>2</sub> Conversion Factor </label>
+                                    <div class="col-sm-9"><input type="text" autocomplete="off" id="co2" placeholder="Co2 Conversion Factor" value='0.9389' class="form-control" />
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 col-sm-9">
+                                        <label class="cr-styled">
+                                                <input type="checkbox">
+                                                <i class="fa"></i>
+                                                Confirm
+                                            </label>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" onclick="saveDashboardSettings();">Save</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+                <!-- /.modal -->
+
+
+
+
+
+
+            </div>
+        </div>
+        <!-- End row -->
+
+
+
+        <div class="row">
+            <div id="support" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; overflow-y: auto;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title" id="custom-width-modalLabel">Support</h4>
+                        </div>
+                        <h2 style="text-align: center; font-weight: 700;"> Need help? Mail Us </h2>
+                        <h3 style="text-align: center;">Info@philips.com</h3>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+
+            <br>
+
+
+
+        </div>
+        </div>
+        <!-- end portlet-collapsed -->
+
+        <!-- ================== -->
+
+        <div>
+            <!DOCTYPE html>
+            <html>
+
+            <head>
+            </head>
+
+            <body>
+                <script type="text/javascript" src="files/js/jquery.idle.js"></script>
+                <script type="text/javascript">
+                    $(document).idle({
+                        onIdle: function() {
+                            $.get("forceLogout.html", function(data, status) {
+                                window.location.href = 'homePage.html';
+                            });
+                        },
+                        idle: 12000000,
+                        keepTracking: true
+                    });
+                </script>
+                <footer class="footer" style=" padding: 10px; height: 38px; background-color: #fff; color: #176498; position: fixed;">
+                    <a href="https://www.signify.com/en-in" target="_blank" style="color: #176498;">©2020 Philips. All rights reserved.</a>
+
+                    <span style="float:right">Version 0.97</span>
+
+                </footer>
+            </body>
+
+            </html>
+        </div>
+
+
+
+
+    </section>
+    <!-- Main Content Ends -->
+
+
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="files/js/jquery.js"></script>
+    <script src="files/js/bootstrap.min.js"></script>
+    <script src="files/js/modernizr.min.js"></script>
+    <script src="files/js/pace.min.js"></script>
+    <script src="files/js/wow.min.js"></script>
+    <script src="files/js/jquery.scrollTo.min.js"></script>
+    <script src="files/js/jquery.nicescroll.js" type="text/javascript"></script>
+    <script src="files/assets/chat/moment-2.2.1.js"></script>
+
+    <!-- Counter-up -->
+    <script src="files/js/waypoints.min.js" type="text/javascript"></script>
+    <script src="files/js/jquery.counterup.min.js" type="text/javascript"></script>
+
+
+
+
+
+    <!--Morris Chart-->
+    <script src="files/assets/morris/morris.min.js"></script>
+    <script src="files/assets/morris/raphael.min.js"></script>
+    <script src="files/assets/morris/morris.init.js"></script>
+
+    <!-- sparkline -->
+    <script src="files/assets/sparkline-chart/jquery.sparkline.min.js" type="text/javascript"></script>
+    <script src="files/assets/sparkline-chart/chart-sparkline.js" type="text/javascript"></script>
+
+    <!-- sweet alerts -->
+    <script src="files/assets/sweet-alert/sweet-alert.min.js"></script>
+    <script src="files/assets/sweet-alert/sweet-alert.init.js"></script>
+
+    <script src="files/js/jquery.app.js"></script>
+    <!-- Chat -->
+    <script src="files/js/jquery.chat.js"></script>
+    <!-- Dashboard -->
+    <script src="files/js/jquery.dashboard.js"></script>
+
+    <!-- Todo -->
+    <script src="files/js/jquery.todo.js"></script>
+
+
+    <script type="text/javascript">
+        /* ==============================================
+                     Counter Up
+                     =============================================== */
+        jQuery(document).ready(function($) {
+            $('.counter').counterUp({
+                delay: 100,
+                time: 1200
+            });
+        });
+    </script>
+
+
+
+
+    <!--Chart start-->
+    <!-- Styles -->
+
+    <!-- Resources -->
+
+    <script type="text/javascript">
+        var modal = document.getElementById('myModal');
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("fancybox-close")[0];
+
+        // When the user clicks on the button, open the modal 
+        function networkfailure() {
+            $('#networkfailure').html("");
+            $('#title').html("");
+
+
+
+            $('#title').html("<br><b>Network Failure List</b>");
+            if ('' > 0) {
+                var html = "";
+                html += ("<br><button onclick=networkfailureprint()>Print</button><br><br>");
+                html += "<table style='border:2px ; margin-left: 70px; margin-bottom:20px; width:90%;' id='networkfailure'>";
+                html += "<tr style='border:1px solid #000;'><td style='padding: 0 12px;'><b>SwitchPhoneNumber</b></td>";
+                html += "<td style='padding: 0 16px;' ><b>Unique Id</b></td><td style='padding: 0 16px;'><b>Mapped Id</b></td><td style='padding: 0 16px;'><b>Longitude</b></td><td style='padding: 0 16px;'><b>Latittude</b></td><td style='padding: 0 16px;'><b>MasterId</b></td><td style='padding: 0 16px;'><b>ResponseTime</b></td></tr>";
+
+
+                html += "</table>";
+                $('#networkfailure').html(html);
+            } else {
+                $('#networkfailure').html("no data found");
+            }
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+
+        function inputPowerFailure() {
+
+            $('#title').html("<br><b>Input Power Failure List</b><br>");
+
+            if ('' > 0) {
+                var html = "";
+                html += ("<br><br><button onclick=inputPowerFailureprint()>Print</button><br><br>");
+                html += "<table style='border:2px ; margin-left: 70px; margin-bottom:20px; '>";
+                html += "<tr style='border:1px solid #000;'><td style='padding: 0 16px;'><b>SwitchPhoneNumber</b></td>";
+                html += "<td style='padding: 0 16px;' ><b>Unique Id</b></td><td style='padding: 0 16px;'><b>Mapped Id</b></td><td style='padding: 0 16px;'><b>Longitude</b></td><td style='padding: 0 16px;'><b>Latittude</b></td><td style='padding: 0 16px;'><b>MasterId</b></td><td style='padding: 0 16px;'><b>ResponseTime</b></td></tr>";
+
+
+                html += "</table>";
+
+                $('#networkfailure').html(html);
+            } else {
+                $('#networkfailure').html("no data found <br><br>");
+            }
+            modal.style.display = "block";
+        }
+
+        function shortCircuitTrips() {
+
+            $('#title').html("<br><b>Short Circuit Trips List</b><br>");
+            if ('' > 0) {
+                var html = "";
+                html += ("<br><button onclick=shortCircuitTripsprint()>Print</button><br><br>");
+                html += "<table style='border:2px ; margin-left: 70px; margin-bottom:20px; ' id=shortCircuitTrips>";
+                html += "<tr style='border:1px solid #000;'><td style='padding: 0 16px;'><b>SwitchPhoneNumber</b></td>";
+                html += "<td style='padding: 0 16px;' ><b>Unique Id</b></td><td style='padding: 0 16px;'><b>Mapped Id</b></td><td style='padding: 0 16px;'><b>Longitude</b></td><td style='padding: 0 16px;'><b>Latittude</b></td><td style='padding: 0 16px;'><b>MasterId</b></td><td style='padding: 0 16px;'><b>ResponseTime</b></td></tr>";
+
+
+                html += "</table>";
+
+                $('#networkfailure').html(html);
+            } else {
+                $('#networkfailure').html("no data found <br><br>");
+            }
+            modal.style.display = "block";
+        }
+
+        function unknownStatus() {
+
+            $('#title').html("<br><b>Unknown Status List</b><br> ");
+            if ('' > 0) {
+                var html = "";
+                html += ("<button onclick=unknownStatus()>Print</button><br><br>");
+                html += "<table style='border:2px ; margin-left: 70px; margin-bottom:20px; '>";
+                html += "<tr style='border:1px solid #000;'><td style='padding: 0 16px;'><b>SwitchPhoneNumber</b></td>";
+                html += "<td style='padding: 0 16px;' ><b>Unique Id</b></td><td style='padding: 0 16px;'><b>Mapped Id</b></td><td style='padding: 0 16px;'><b>Longitude</b></td><td style='padding: 0 16px;'><b>Latittude</b></td><td style='padding: 0 16px;'><b>MasterId</b></td><td style='padding: 0 16px;'><b>ResponseTime</b></td></tr>";
+
+
+                html += "</table>";
+
+                $('#networkfailure').html(html);
+            } else {
+                $('#networkfailure').html("no data found<br><br>");
+            }
+            modal.style.display = "block";
+        }
+
+
+        function HVTrips() {
+
+            $('#title').html("<br><b>HV Trip List</b><br> ");
+            if ('' > 0) {
+                var html = "";
+                html += ("<button onclick=HVtripList()>Print</button><br><br>");
+                html += "<table style='border:2px ; margin-left: 70px; margin-bottom:20px; '>";
+                html += "<tr style='border:1px solid #000;'><td style='padding: 0 16px;'><b>SwitchPhoneNumber</b></td>";
+                html += "<td style='padding: 0 16px;' ><b>Unique Id</b></td><td style='padding: 0 16px;'><b>Mapped Id</b></td><td style='padding: 0 16px;'><b>Longitude</b></td><td style='padding: 0 16px;'><b>Latittude</b></td><td style='padding: 0 16px;'><b>MasterId</b></td><td style='padding: 0 16px;'><b>ResponseTime</b></td></tr>";
+
+
+                html += "</table>";
+
+                $('#networkfailure').html(html);
+            } else {
+                $('#networkfailure').html("no data found<br><br>");
+            }
+            modal.style.display = "block";
+        }
+
+
+        function LVTrips() {
+
+            $('#title').html("<br><b>LV Trip List</b><br> ");
+            if ('' > 0) {
+                var html = "";
+                html += ("<button onclick=LVTrips()>Print</button><br><br>");
+                html += "<table style='border:2px ; margin-left: 70px; margin-bottom:20px; '>";
+                html += "<tr style='border:1px solid #000;'><td style='padding: 0 16px;'><b>SwitchPhoneNumber</b></td>";
+                html += "<td style='padding: 0 16px;' ><b>Unique Id</b></td><td style='padding: 0 16px;'><b>Mapped Id</b></td><td style='padding: 0 16px;'><b>Longitude</b></td><td style='padding: 0 16px;'><b>Latittude</b></td><td style='padding: 0 16px;'><b>MasterId</b></td><td style='padding: 0 16px;'><b>ResponseTime</b></td></tr>";
+
+
+                html += "</table>";
+
+                $('#networkfailure').html(html);
+            } else {
+                $('#networkfailure').html("no data found<br><br>");
+            }
+            modal.style.display = "block";
+        }
+
+        function networkfailureprint() {
+
+            var divToPrint = document.getElementById("networkfailure");
+            newWin = window.open("");
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+        function shortCircuitTripsprint() {
+
+            var divToPrint = document.getElementById("shortCircuitTrips");
+            newWin = window.open("");
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+        function shortCircuitTripsprint() {
+
+            var divToPrint = document.getElementById("shortCircuitTrips");
+            newWin = window.open("");
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+        function mcbreset(phoneNumber) {
+            $.ajax({
+                type: "POST",
+                url: "mcbreset.html",
+                data: "phoneNumber=" + phoneNumber,
+                complete: function(response) {
+                    if (response.responseText == "Success")
+                        alert("MCB RESET command succesfully sent");
+                    else {
+
+                        alert("MCB RESET command failed");
+                    }
+                }
+            });
+
+        }
+
+        function loadGroups() {
+            var zoneId = $("#zoneId").val();
+            //alert(zoneId);
+            $.ajax({
+                type: 'GET',
+                async: false,
+                url: "loadGroupsByZone.html",
+                data: "zoneId=" + zoneId,
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    $('#groupId').html("");
+                    $('#groupId').append('<option value="">' + "All Groups" + '</option>');
+                    $.each(data.Groups, function(i, d) {
+                        $('#groupId').append(
+                            '<option value="' + d.groupId + '">' +
+                            d.groupName +
+                            '</option>');
+                    });
+                },
+                error: function() {
+                    alert('Error while request..');
+                }
+            });
+
+            return false;
+        }
+    </script>
+
+
+
+
+    <!-- Add fancyBox main JS and CSS files -->
+    <script type="text/javascript" src="source/jquery.fancybox.js?v=2.1.5"></script>
+
+
+
+
+
+
+    <script>
+        function showhomepage() {
+            $('#instruct').remove();
+
+            $('#main').show();
+            $.fancybox({
+                href: "#pagehelp",
+            }).click();
+
+        }
+
+        function openreportdatepicker() {
+            $.fancybox.open({
+                href: 'report.html',
+                type: 'iframe',
+                padding: 5,
+
+            });
+        }
+
+        function customerSettings() {
+            //window.alert("inside settings");
+            $.fancybox.open({
+                href: 'settingsiframe.html',
+                type: 'iframe',
+            });
+        }
+
+        function openLampFailureReportGenerationPage() {
+            $.fancybox.open({
+                href: 'lampFailureReport.html',
+                type: 'iframe',
+                padding: 5,
+
+            });
+        }
+
+
+
+        //Dashboard settings
+        function saveDashboardSettings() {
+            var previouskWh = document.getElementById("previouskwh").value;
+            var unitPrice = document.getElementById("unitprice").value;
+            var co2 = document.getElementById("co2").value;
+            $.ajax({
+                type: "POST",
+                url: "saveDashboardSettings.html",
+                data: "previouskwh=" + previouskWh + "&unitprice=" + unitPrice + "&co2=" + co2,
+                success: function(response) {
+                    if (response == "success") {
+                        document.getElementById("dashboardsavesuccess").innerHTML = "Settings Saved succesfully";
+                        $.fancybox({
+                            href: "#dashboardsavesuccess"
+                        }).click();
+                    } else {
+                        document.getElementById("dashboardsavefailure").innerHTML = "Sorry Failed to Save Settings";
+                        $.fancybox({
+                            href: "#dashboardsavefailure"
+                        }).click();
+                    }
+                },
+                error: function(response) {
+                    alert('Error: ' + response);
+                }
+            });
+        }
+
+        function lampFailureReport() {
+            window.location.href = "lampFailureReport.xls";
+        }
+    </script>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myDIV");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        /* var tableToExcel = (function() {
+          var uri = 'data:application/vnd.ms-excel;base64,'
+            , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+            , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+            , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; } }
+          return function(table, name) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+            window.location.href = uri + base64(format(template, ctx))
+          }
+        })() */
+    </script>
+
+
+
+    <script src="files/assets/datatables/jquery.dataTables.min.js"></script>
+    <script src="files/assets/datatables/dataTables.bootstrap.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                "lengthMenu": [
+                    [10, 25, 50, 100, 200, 300, -1],
+                    [10, 25, 50, 100, 200, 300, "All"]
+                ]
+            });
+        });
+        $(document).ready(function() {
+            $('#datatable').dataTable();
+        });
+    </script>
+
+
+    <script>
+        function getChildLocations(locId, levelNo) {
+
+            var needToGetChildNodes = true;
+            var existingSelectedIds = '';
+            if (existingSelectedIds != locId.replace("~All", "")) {
+                document.getElementById("applyFilterButton").setAttribute("style", "width:60px;height: 27px;margin-top: 13px;background-color: #176498; box-shadow:1px 3px 3px 0px rgba(0, 0, 0, 0.20);color: white;border: white;border-radius: 5px;");
+                document.getElementById("applyFilterButton").disabled = false;
+            } else {
+                document.getElementById("applyFilterButton").setAttribute("style", "width:60px;height: 27px;margin-top: 13px;background-color: #999; box-shadow:1px 3px 3px 0px rgba(0, 0, 0, 0.20);color: white;border: white;border-radius: 5px;");
+                document.getElementById("applyFilterButton").disabled = true;
+            }
+            if (locId.includes("All")) {
+                locId = locId.replace("~All", "");
+                for (var j = parseInt(levelNo); j < 6; j++) {
+                    document.getElementById("level" + j).innerHTML = "";
+                }
+                needToGetChildNodes = false;
+            }
+
+
+            var nextChildLevel = parseInt(levelNo) + 1;
+            var currentLevel = parseInt(levelNo) - 1;
+            document.getElementById("selectLocId").value = locId;
+            document.getElementById("selectLocIdsStr").value = locId;
+            document.getElementById("selected_level").value = currentLevel;
+
+            if (nextChildLevel < 6 && needToGetChildNodes) {
+                for (var j = parseInt(levelNo); j < 6; j++) {
+                    document.getElementById("level" + j).innerHTML = "";
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    data: 'selected_loc_ids_string=' + locId + "&current_level=" + currentLevel,
+                    url: 'getChildLocations.html',
+                    success: function(response) {
+                        var getValues = JSON.parse(response);
+                        if (getValues.ChildLocations.length > 0) {
+                            var select_result = '<div style="padding: 5px;"><table align="center"><tr><p style="font-size:14px;">';
+                            select_result += '<select class="select" id="myselect" style="padding: 5px; background-color: #fffff;" onchange="getChildLocations(this.value,' + nextChildLevel + ');">';
+
+                            /*  select_result+='<option value="-1">--- All ---</option>'; */
+                            for (var i = 0; i < getValues.ChildLocations.length; i++) {
+                                if (i == 0)
+                                    select_result += '<option value="' + getValues.ChildLocations[i].path_ids + '" selected>' + getValues.ChildLocations[i].locName + '</option>';
+                                else
+                                    select_result += '<option value="' + getValues.ChildLocations[i].path_ids + '">' + getValues.ChildLocations[i].locName + '</option>';
+
+
+                            }
+                            select_result += '</select>';
+                            select_result += '</p></tr></table></div>';
+                            document.getElementById("level" + levelNo).innerHTML = select_result;
+
+                        }
+                        /* else
+                        {
+                            alert("End of the hierarchy reached..");
+                        } */
+
+
+                    },
+                    failure: function() {
+                        alert('failure');
+                    }
+                });
+            } else if (needToGetChildNodes) {
+                alert("Select Apply");
+            }
+        }
+
+        function applyFilter() {
+            var selected_loc_id = document.getElementById("selectLocId").value;
+
+            var selected_level = document.getElementById("selected_level").value;
+            var selected_loc_ids_string = document.getElementById("selectLocIdsStr").value;
+            if (typeof selected_loc_id !== "undefined") {
+                window.location.href = "customerDashBoard.html?selected_loc_id=" + selected_loc_id + "&selected_loc_ids_string=" + selected_loc_ids_string;
+
+            } else {
+                alert("Please choose one Area");
+            }
+
+
+        }
+
+        function applyMapFilter(type, value, count) {
+            if (count != null && count > 0) {
+                window.location.href = "customerDashBoard.html?map_filter_type=" + type + "&map_filter_value=" + value + "#map";
+            }
+
+
+        }
+
+        function SelfEditUserDetailsIframe() {
+            $.fancybox.open({
+                href: 'SelfEditUserDetailsIframe.html',
+                type: 'iframe',
+                padding: 5,
+                helpers: {
+                    overlay: null
+                }
+            });
+        }
+
+        function refresh() {
+            $.post('https://nsremote.tech:8099/solarwebapi/refreshstats', '{}', function(data, textStatus) {
+                window.location.reload();
+            }, "json");
+        }
+    </script>
+    <hidden id="selectLocId" name="selectLocId" value="" />
+    <hidden id="selectLocIdsStr" name="selectLocIdsStr" value="venugopal" />
+    <hidden id="selected_level" name="selected_level" value="" />
+    <hidden id="selectLocIdOriginal" name="selectLocIdOriginal" value="" />
+    <hidden id="existingValue" name="selectLocIdOriginal" value="" />
+
+    <!--    <script>
+         var date = document.lastModified;    
+         
+          document.getElementById("timedemo").innerHTML =
+"Status at : " + date + ""; 
+         
+         
+     
+      </script> -->
+</body>
+
+</html>
