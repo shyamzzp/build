@@ -1,0 +1,182 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+label {
+    display: inline;
+    line-height: 1;
+}
+
+#wrap {
+    display: block;
+    f margin: 0 auto;
+    background: #fff;
+    margin-left: 10px;
+}
+
+#switch {
+    display: block;
+    width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    margin-left: 10px;
+    height: 300px;
+}
+
+#pagehelp {
+    display: none;
+    margin-top: 10px;
+    margin-left: 50px;
+    font-family: cursive;
+    color: black;
+    font-size: 16px;
+    text-align: left;
+    width: 600px;
+    font-weight: 600;
+}
+
+#moveswitch {
+    display: block;
+    width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    margin-left: 10px;
+    height: 550px;
+}
+
+#setting {
+    display: block;
+    width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    margin-left: 10px;
+    height: 300px;
+}
+
+#wrap1 {
+    display: block;
+    margin: 0 auto;
+    background: #fff;
+    margin-left: 10px;
+}
+
+#wrap3 {
+    display: block;
+    margin: 0 auto;
+    background: #fff;
+    margin-left: 10px;
+}
+
+/** the contact form **/
+
+#contact-form {
+    display: block;
+}
+
+.lbl {
+    font-size: 14px;
+    font-weigh: bold;
+}
+
+#contact-form .rowbox {
+    display: block;
+    width: 100%;
+    position: relative;
+    padding: 15px 5px;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#contact-form .rowbox.colors {
+    background: #e6e3ba;
+    border-top-color: #b9b576;
+    border-bottom-color: #b9b576;
+}
+
+#contact-form .rowbox.txtarea {
+    margin-bottom: 15px;
+}
+
+#contact-form .rowbox label {
+    display: inline;
+    position: absolute;
+    top: 25px;
+    left: 10px;
+    font-family: Arial, Tahoma, sans-serif;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #666;
+}
+
+#contact-form .rowbox label small {
+    vertical-align: super;
+    font-size: 0.65em;
+}
+
+#contact-form .rowbox.txtarea label {
+    top: 22px;
+}
+
+#contact-form .infobox {
+    position: absolute;
+    top: 20px;
+    left: 390px;
+    color: #787878;
+    padding-left: 20px;
+    font-size: 12px;
+    background: url('../images/info.png') 0px 0px no-repeat;
+    height: 20px;
+    line-height: 17px;
+    display: block;
+    opacity: 0;
+}
+
+#contact-form .infobox.good {
+    background: url('../images/tick.png') 0px 0px no-repeat !important;
+}
+
+#contact-form .txtbar {
+    box-shadow: 0 0 5px #333;
+    display: block;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 1.5em;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    color: #888;
+    width: 320px;
+}
+
+#contact-form .txtbox {
+    box-shadow: 0 0 5px #333;
+    display: block;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 1.5em;
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    color: #888;
+    width: 350px;
+    height: 130px;
+}
+
+#contact-form #sendbtn {
+    display: block;
+    padding: 11px 15px;
+    border: 1px solid #cdcdcd;
+    color: #888;
+    font-weight: bold;
+    background: #dfdfdf;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#contact-form #sendbtn:hover {
+    cursor: pointer;
+    background: #efefef;
+    color: #989898;
+}
+
+img {
+    cursor: pointer;
+}
