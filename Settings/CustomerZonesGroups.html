@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+
+
+
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kakatiya is a leading name in Smart Lighting Controllers and Centralised Control Monitoring System (CCMS) Systems. For more details about our lighting control systems please visit www.natureswitch.com">
+    <meta name="keywords" content="Smart Lighting Controllers, CCMS, Lighting Control Systems, Remote Light Switch, Remote Control Light Switch, GSM Remote Control, Digital Timer, Automatic Light Switch, Automatic Street Light">
+    <meta name="author" content="Kakatiya-Energy-Systems">
+
+    <link rel="shortcut icon" href="files/img/favicon.ico">
+
+    <title>Manage electrical load remotely</title>
+
+    <!-- Google-Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic' rel='stylesheet'>
+
+    <!-- Bootstrap core CSS -->
+    <link href="files/css/bootstrap.min.css" rel="stylesheet">
+    <link href="files/css/bootstrap-reset.css" rel="stylesheet">
+
+    <!--Animation css-->
+    <link href="files/css/animate.css" rel="stylesheet">
+
+    <!--Icon-fonts css-->
+    <link href="files/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="files/assets/ionicon/css/ionicons.min.css" rel="stylesheet" />
+
+    <!--Morris Chart CSS -->
+    <link rel="stylesheet" href="files/assets/morris/morris.css">
+
+    <!-- sweet alerts -->
+    <link href="files/assets/sweet-alert/sweet-alert.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="files/css/style.css" rel="stylesheet">
+    <link href="files/css/helper.css" rel="stylesheet">
+    <link href="files/css/style-responsive.css" rel="stylesheet" />
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAArT7ou_E0U1GUzFzx4TEL5P3u51iRcDo&callback=initMap"></script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+
+
+
+    <script src="files/js/amcharts.js"></script>
+    <script src="files/js/serial.js"></script>
+    <script src="files/js/light.js"></script>
+
+
+
+
+
+
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+    <!--[if lt IE 9]>
+  <script src="js/html5shiv.js"></script>
+  <script src="js/respond.min.js"></script>
+<![endif]-->
+
+
+</head>
+
+
+<body>
+
+    <!-- Aside Start-->
+    <aside class="left-panel">
+
+        <!-- brand -->
+        <div class="logo">
+
+            <!--img src="img/single-logo.png" alt="logo"-->
+            <img src="files/logos/logo.png" width="100%" height="auto" alt="logo"><br>
+            <h4 style="text-align: center; color: white; font-weight: 700;">Nature Switch Remote <br>Web Interface</h4>
+            <p style="color: white; text-align: center;     font-size: 11px;"> kccms.bhongir@gmail.com</p>
+
+        </div>
+        <!-- / brand -->
+
+        <!-- Navbar Start -->
+        <nav class="navigation">
+            <ul class="list-unstyled">
+                <li class="menu"><a href="customerDashBoard.html"><i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard</span></a>
+                </li>
+
+                <li class="active"><a href="customerAdmin.html"><i class="ion-flag "></i> <span class="nav-label">Zones/Groups</span></a></li>
+                <li class="menu"><a href="customerViewSwitches.html"><i class="ion-settings"></i> <span class="nav-label">Switch Settings</span></a></li>
+                <!--                      <li class="menu"><a href="liveStatusReport.html"><i class="ion-radio-waves"></i> <span class="nav-label">Status Report</span></a></li>
+ -->
+                <li class="menu"><a href="DashBoardUser.html"><i class="ion-ios7-person"></i> <span class="nav-label">User Accounts</span></a></li>
+
+                <!--                     <li class="menu"><a href="#" onclick="openreportdatepicker();"><i class="ion-clipboard"></i> <span class="nav-label">Reports</span></a></li>
+ -->
+                <li class="menu"><a href="reports.html"><i class="ion-clipboard"></i> <span class="nav-label">Download Reports</span></a></li>
+
+                <!--   <li class="menu"><a href="help.html"><i class="ion-help-circled"></i> <span class="nav-label">Help</span></a>
+
+                    </li> -->
+
+            </ul>
+        </nav>
+    </aside>
+    <!-- Aside Ends-->
+
+
+    <!--Main Content Start -->
+    <section class="content">
+
+        <!-- Header -->
+        <header class="top-head container-fluid">
+            <button type="button" class="navbar-toggle pull-left">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            <!-- Search -->
+            <div style="float: left;">
+                <div style="float: left; margin-top: 10px; margin-right: 0px;">
+                    <span style="float: left;width: 155px;"><input type="text" id="searchtext" size="30" onkeydown="checkenter(event);" class="searchbox form-control" placeholder="Search" style="
+    border-radius: 16px;
+"> </span> <span style="float: left; margin-top: 1px;"><i class="fa fa-search" onclick="getsearch()" style="
+    margin-top: 9px;
+    margin-left: -19px;
+        cursor: pointer;
+"></i></span>
+                </div>
+            </div>
+
+            <!-- Left navbar -->
+            <nav class=" navbar-default hidden-xs" role="navigation">
+                <ul class="nav navbar-nav">
+
+
+                    <li><a href="#" data-toggle="modal" data-target="#dashboardsettings"><i class="fa fa-cog"></i> Dashboard Settings</a></li>
+                </ul>
+            </nav>
+
+            <!-- Right navbar -->
+            <ul class="list-inline navbar-right top-menu top-right-menu">
+
+
+                <!-- user login dropdown start-->
+                <li class="dropdown text-center">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <img alt="" src="files/img/avatar-2.jpg" class="img-circle profile-img thumb-sm">
+                            <span class="username">Bhongir </span> <span class="caret"></span>
+                        </a>
+                    <ul class="dropdown-menu extended pro-menu fadeInUp animated" tabindex="5003" style="overflow: hidden; outline: none;">
+
+                        <li><a href="#" data-toggle="modal" data-target="#support">Support </a></li>
+                        <!-- <li><a class="fancybox" href="#changepassword"> Change password </a></li> -->
+                        <li><a href="signout.html">Log Out</a></li>
+                    </ul>
+                </li>
+                <!-- user login dropdown end -->
+            </ul>
+            <!-- End right navbar -->
+
+        </header>
+        <div id="changepasswordsuccess" style="display: none; height: 50px; width: 500px; text-align: center; margin-top: 30px"></div>
+        <div id="changepasswordfailure" style="display: none; height: 50px; width: 500px; text-align: center; margin-top: 30px"></div>
+        <div id="changepassword" align="center" style="display: none; height: 300px; width: 600px;">
+            <table>
+                <tr>
+                    <td align="center" style="font-size: 16px;" colspan="2"><b>Change
+									password</b><br />
+                        <br />
+                        <hr />
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><span id="errorchangepasswordmain" style="color: red">&nbsp; </span></td>
+
+                </tr>
+                <tr>
+                    <td>Enter Current password</td>
+                    <td align="center"><input type="password" id="oldpassword" placeholder="Enter Current password" class="textbox" onblur="validateoldpassword();" /></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td align="center"><span id="erroroldpassword" style="color: red">&nbsp; </span></td>
+                </tr>
+                <tr>
+                    <td>Enter new password</td>
+                    <td align="center"><input type="password" id="changepassword1" placeholder="Minimum 6 characters" class="textbox" onblur="validatepassword();" /></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td align="center"><span id="errorchangepassword1" style="color: red">&nbsp; </span></td>
+                </tr>
+
+                <tr>
+                    <td>Re-Enter new password</td>
+                    <td align="center"><input type="password" id="changepassword2" placeholder="Re-Enter password" class="textbox" onblur="validateretypepassword();" /><br /></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td align="center"><span id="errorchangepassword2" style="color: red">&nbsp; </span></td>
+                </tr>
+
+                <tr>
+
+
+                    <td colspan="2" align="center"><input type="button" class="btn btn-primary" id="btnSmall" value="Change Password" onclick="changepassword();" />&nbsp;&nbsp;&nbsp;
+                        <input type="button" class="btn" value="Cancel" name="clrdata" id="clrdata" onclick="$.fancybox.close();" />
+                </tr>
+            </table>
+        </div>
+        <!-- Header Ends -->
+
+
+        <!-- Page Content Start -->
+        <!-- ================== -->
+
+        <div class="wraper container-fluid">
+
+
+
+            <div id="skip-menu"></div>
+            <div id="content">
+
+                <!-- Content box with white background and gray border -->
+                <div align="center">
+
+                    <div>
+
+                        <div id="inline5" style="display: none;" align="center">
+                            <div id="success" style="display: none;" align="center">
+                                Zone Added successfully <br /> <input type="button" class="btn btn-default" value="Cancel" name="clrdata" id="clrdata" onclick="$.fancybox.close();" />
+                            </div>
+                            <div id="gps" style="width: 500px">
+
+                                <table class="tbcss" align="center" width="50%" cellspacing="5px">
+                                    <tr>
+                                        <td colspan="2" align="center" style="font-size: 16px; font-weight: bold"><b>Edit
+												Zone Details</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center"><label class="lbl">Name*</label></td>
+                                        <td align="center"><input type="hidden" id="groupIDedit" /><input type="text" id="groupNameedit" size="30" placeholder="Maximum 15 characters" class="textbox" onblur="testgroupnameedit();" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td align="center" style="color: red;" width="45%"><span id="errorgroupnameedit">&nbsp;</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center"><label class="lbl">Address/Remarks</label></td>
+                                        <td align="center"><input id="addressorremarksedit" size="30" class="textbox" placeholder="Max 200 characters" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td align="center" style="color: red;"><span id="errorremarkedit">&nbsp;</span><span id="groupnameexistedit">&nbsp;</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <!-- <td colspan="2" align="center"><img src="images/smallicons/updatesmall_up.png"
+											onclick="addZonetoCustomeredit();" />&nbsp;&nbsp;&nbsp;-->
+                                        <!-- <img src="images/smallicons/delete_up.png" onclick="deleteconfirmation();"/>
+											&nbsp;&nbsp;-->
+                                        <!-- <img src="images/smallicons/close_up.png" onclick="fancyboxclose();" onmousedown="closesmalldown(this);" onmouseup="closesmallup(this);"/>
+											</td>-->
+                                        <td colspan="2" align="center"><input type="button" class="btn btn-primary" id="btnSmall" value="Update" onclick="addZonetoCustomeredit();" />&nbsp;&nbsp;&nbsp;
+                                            <input type="button" class="btn btn-default" id="btnSmall" value="Close" onclick="fancyboxclose();" />
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="inline1" style="display: none; " align="center">
+                            <div id="success" style="display: none;" align="center">
+                                Zone Added successfully <br /> <input type="button" class="btn btn-default" value="Cancel" name="clrdata" id="clrdata" onclick="$.fancybox.close();" />
+                            </div>
+
+                            <div id="gps">
+                                <div>
+                                    <table class="tbcss" align="center" width="50%" cellspacing="5px">
+                                        <tr>
+                                            <td colspan="2" align="center" style="font-size: 16px; font-weight: bold"><b>Enter
+												Zone Detials</b>
+                                                <br />
+                                                <hr />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center"><label class="lbl">Name*</label></td>
+                                            <td align="center"><input type="hidden" id="groupID" /><input type="text" id="groupName" size="30" placeholder="Maximum 15 characters" class="textbox" onblur="testgroupname();" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td align="center" style="color: red;" width="45%"><span id="errorgroupname">&nbsp;</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center"><label class="lbl">Address/Remarks</label></td>
+                                            <td align="center"><input id="addressorremarks" size="30" class="textbox" placeholder="Max 200 characters" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td align="center" style="color: red;"><span id="errorremark">&nbsp;</span><span id="groupnameexist">&nbsp;</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <!-- <td colspan="2" align="center"><img
+											src="images/smallicons/addgroupsmall_down.png"
+											onclick="addZonetoCustomer();" />&nbsp;&nbsp;&nbsp;<img
+											src="images/smallicons/close_up.png"
+											onmousedown="closesmalldown(this)"
+											onmouseup="closesmallup(this)" onclick="$.fancybox.close();" /></td>-->
+                                            <td colspan="2" align="center"><input type="button" class="btn btn-primary" value="Create Zone" id="btnSmall" onclick="addZonetoCustomer();" />&nbsp;&nbsp;
+                                                <input type="button" class="btn btn-default" value="Close" id="btnSmall" onclick="$.fancybox.close();" /></td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- <div id="inline3" style="display: none;" align="center">
+							<div id="success" style="display: none;" align="center">
+								Add/Move Group Successfull <br /> <input type="button"
+									class="btn" value="Clear" name="clrdata" id="clrdata"
+									onclick="$.fancybox.close();" />
+							</div>
+
+							<div id="moveswitch">
+
+								<table class="tbcss" align="center" cellspacing="5px"
+									style="margin-top: 5px">
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3" align="center"
+											style="font-size: 16px; font-weight: bold"><b>Select
+												any one Zone to add/move Groups</b></td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td align="center" style="font-size: 14px"><b>Source Zone</b></td>
+										<td>&nbsp;</td>
+										<td align="center" style="font-size: 14px"><b>Destination Zone</b></td>
+									</tr>
+									<tr>
+										<td valign="top"><div id="group_result"></div></td>
+										<td valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+										<td valign="top"><div id="group_result1"></div></td>
+
+									</tr>
+									<tr>
+										<td valign="top"><div id="switchesLeft"
+												style="height: 100%; width: 100%; position: relative;"></div></td>
+
+										<td style="text-align: center"><img
+											src="images/arrow.png" width="33"
+											height="22" onclick="moveSwitches()" /></td>
+										<td valign="top"><div id="switchesRight"
+												style="height: 100%; width: 100%; position: relative;"></div></td>
+
+									</tr>
+									<tr>
+										<td valign="top" style="text-align: center"><img
+											src="images/update1.png" onclick="moveSwitchToGroups();" /></td>
+										<td valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+										<td style="text-align: center"><img
+											src="images/cancel1.png" id="clrdata"
+											onclick="$.fancybox.close();" />&nbsp;&nbsp;&nbsp;&nbsp;</td>
+									</tr>
+								</table>
+							</div>
+						</div>-->
+                        <div id="inline3" style="display: none;" align="center">
+                            <div id="success" style="display: none;" align="center">
+                                Add/Move Group Successfully <br /> <input type="button" class="btn" value="Clear" name="clrdata" id="clrdata" onclick="$.fancybox.close();" />
+                            </div>
+                            <div id="moveswitch" style="width: 500px;">
+                                <table class="tbcss" align="center" cellspacing="5px" style="margin-top: 5px">
+                                    <tr>
+                                        <td colspan="3" align="center" style="font-size: 16px; font-weight: bold"><b>Select
+												any one Zone to add/move Groups</b><br/><br/>
+                                            <hr/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="font-size: 14px"><b>Source
+												Zone</b></td>
+                                        <td>&nbsp;</td>
+                                        <td align="center" style="font-size: 14px"><b>Destination
+												Zone</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">
+                                            <div id="group_result"></div>
+                                        </td>
+                                        <td valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                        <td valign="top">
+                                            <div id="group_result1"></div>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">
+                                            <div id="switchesLeft" style="height: 100%; width: 100%; position: relative;"></div>
+                                        </td>
+
+                                        <td style="text-align: center"><img src="images/arrow.png" width="80px" height="40px" onclick="moveSwitches()" /></td>
+                                        <td valign="top">
+                                            <div id="switchesRight" style="height: 100%; width: 100%; position: relative;"></div>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"></td>
+                                    </tr>
+                                    <tr>
+                                        <!-- <td valign="top" style="text-align: center"><img
+											src="images/smallicons/updatesmall_up.png" onclick="moveSwitchToGroups();" /></td>
+										<td valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> -->
+                                        <!-- <td colspan="3" style="text-align: center"><img src="images/smallicons/save&close.png" onclick="moveSwitchToGroups()"/>&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
+                                        <td colspan="3" style="text-align: center"><input type="button" value="Save and Exit" id="btnSmall" onclick="moveSwitchToGroups()" style="border: #33b0e0;
+    background-color: #33b0e0;
+    color: white;" /> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <table>
+                        <tr>
+                            <td align="center">
+
+
+
+
+
+                            </td>
+                            <!-- <td ><a href="#"><img id="addormoveswitch" onmousedown="addormoveswitchdown();" onmouseup="addormoveswitchup();"
+											src="images/dabuttonfactory/addormoveswitch_up.png"
+											onclick="addMoveSw
+											itches(23732)" /></a></td>-->
+                            <td width="25%"><input style=" border: #33b0e0;
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #00bfff), color-stop(1, #138bf1) );
+    color: white;    padding: 6px 12px; border-radius: 14px; font-size: 16px; font-weight: 700; text-shadow: 1px 1px 1px #000;" type="button" value="Transfer Groups" id="btnZone" onclick="addMoveSwitches(23732)" /></td>
+                            <!-- <td align="center"><a class="fancybox" href="#inline1"><img
+											id="addgroup" onmousedown="addgroupdown();"
+											onmouseup="addgroupup();"
+											src="images/dabuttonfactory/addgroup_up.png" /></a></td>-->
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <td><input style=" border: #33b0e0;
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #00bfff), color-stop(1, #138bf1) );
+    color: white;
+    padding: 6px 12px;     border-radius: 14px; margin-left: 30px; font-size: 16px; font-weight: 700; text-shadow: 1px 1px 1px #000;" type="button" value="Create Zone" id="btnZone" class="fancybox" href="#inline1" /></td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12" id="inline2">
+                                    <div class="table-responsive">
+                                        <table class="table">
+
+
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: left;">S.No.</th>
+                                                    <th style="text-align: left;">Zone Name</th>
+                                                    <th style="text-align: left;">Edit</th>
+                                                    <th style="text-align: center;">Groups</th>
+                                                    <th style="text-align: center;">Active Switches</th>
+                                                    <th style="text-align: center;">Under Maintenance</th>
+                                                    <th style="text-align: center;">Total Switches</th>
+                                                    <!-- <td style="font-size: 16px">Actions</td> -->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+
+                                                <!---->
+
+
+                                                <tr>
+                                                    <td style="text-align: left;">1</td>
+                                                    <td style="text-align: left; text-decoration: underline;">
+                                                        <input type="hidden" value="34919" />
+                                                        <input type="hidden" value="1" />
+                                                        <a href="customerHomepage.html?zoneid=34919&databaseCode=1">
+																Bhongir
+															</a>
+                                                    </td>
+                                                    <td style="text-align: left; cursor: pointer;"><img src="images/edit_ic_normal.png" onclick="editZone(34919)" /></td>
+                                                    <td style="text-align: center;">10</td>
+                                                    <td style="text-align: center;">165</td>
+                                                    <td style="text-align: center;">0</td>
+                                                    <td style="text-align: center;">165</td>
+                                                    <!--
+													<td>SMS
+														Users()
+													</td>
+-->
+                                                    <!--
+													<td><img
+														src="images/edit_ic_normal.png"
+														onclick="editGroup(34919)" /></td>
+-->
+                                                    <!--
+												 <td><img
+													src="images/deleteicon.png" width="33"
+													height="22" onclick="deleteconfirmation(34919);" /></td>
+-->
+                                                </tr>
+
+
+
+                                                <!---->
+
+
+                                                <tr>
+                                                    <td style="text-align: left;">2</td>
+                                                    <td style="text-align: left; text-decoration: underline;">
+                                                        <input type="hidden" value="456302586" />
+                                                        <input type="hidden" value="2" />
+                                                        <a href="customerHomepage.html?zoneid=456302586&databaseCode=2">
+																Bhongir
+															</a>
+                                                    </td>
+                                                    <td style="text-align: left; cursor: pointer;"><img src="images/edit_ic_normal.png" onclick="editZone(456302586)" /></td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center;">6</td>
+                                                    <td style="text-align: center;">0</td>
+                                                    <td style="text-align: center;">6</td>
+                                                    <!--
+													<td>SMS
+														Users()
+													</td>
+-->
+                                                    <!--
+													<td><img
+														src="images/edit_ic_normal.png"
+														onclick="editGroup(456302586)" /></td>
+-->
+                                                    <!--
+												 <td><img
+													src="images/deleteicon.png" width="33"
+													height="22" onclick="deleteconfirmation(456302586);" /></td>
+-->
+                                                </tr>
+
+
+
+                                                <tbody>
+                                        </table>
+
+
+
+                                    </div>
+
+                                </div>
+
+
+                                <div>
+
+                                    <br /> <br /> <br /> <br /> <br /> <br />
+                                </div>
+                            </div>
+    </section>
+
+    </div>
+    <!-- Content box with white background and gray border end -->
+    </div>
+
+
+
+
+
+    <!-- Page Content Ends -->
+
+    <!--Start Transfer Groups-->
+
+    <div class="row">
+        <div class="col-md-12">
+
+
+            <div id=" " class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+                <div id="success" class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title" id="custom-width-modalLabel">Select any one Zone to add/move Groups</h4>
+                        </div>
+                        <form class="form-horizontal" role="form">
+
+                            <div id="moveswitch" class="col-lg-12">
+
+
+
+                                <div class="col-lg-4">
+                                    <div class="btn-group dropdown">
+
+                                        <h3 class="panel-title">Source Zone</h3>
+
+                                        <div id="group_result"> </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" style="text-align: center;">
+
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="btn-group dropdown">
+
+                                        <h3 class="panel-title">Destination Zone</h3>
+
+                                        <div id="group_result1"> </div>
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+
+
+
+                            <div class="col-sm-offset-4 col-sm-12">
+                                <button class="btn btn-success m-b-5" onclick="moveSwitches()"><span>Transfer Group</span> <i class="ion-arrow-right-c"></i></button>
+                            </div>
+
+
+                        </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="moveSwitchToGroups()">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+
+            <!--End Transfer Groups-->
+
+            <!--Start Dashboard Setiings-->
+
+            <!-- Custom Modals -->
+            <div id="dashboardsavesuccess" style="display: none; height: 50px; width: 500px; text-align: center; margin-top: 30px"></div>
+            <div id="dashboardsavefailure" style="display: none; height: 50px; width: 500px; text-align: center; margin-top: 30px"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+
+                    <div id="dashboardsettings" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h4 class="modal-title" id="custom-width-modalLabel">Dashboard Settings</h4>
+                                </div>
+                                <form class="form-horizontal" role="form">
+                                    <br><br>
+                                    <div class="form-group">
+                                        <label onkeypress='validate(event)' class="col-sm-3 control-label">Enter Previous kWh</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="previouskwh" autocomplete="off" placeholder="Enter Previous KWh" value='0.0' class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Enter Unit Price</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" autocomplete="off" id="unitprice" placeholder="unit price" value='6.25' class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">CO<sub>2</sub> Conversion Factor </label>
+                                        <div class="col-sm-9"><input type="text" autocomplete="off" id="co2" placeholder="Co2 Conversion Factor" value='0.9389' class="form-control" />
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-9">
+                                            <label class="cr-styled">
+                                                <input type="checkbox">
+                                                <i class="fa"></i>
+                                                Confirm
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" onclick="saveDashboardSettings();">Save</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
+
+
+
+
+
+
+                </div>
+            </div>
+            <!-- End row -->
+
+            <!--End Dashboard Settings-->
+
+
+            <!--Start Create Zone-->
+            <div class="row">
+                <div class="col-md-12">
+
+
+                    <div id="custom-width-modal4" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h4 class="modal-title" id="custom-width-modalLabel">Enter Zone Details</h4>
+                                </div>
+                                <form class="form-horizontal" role="form">
+                                    <br><br>
+                                    <div class="form-group">
+                                        <label onkeypress='validate(event)' class="col-sm-3 control-label">Name*</label>
+
+
+                                        <div class="col-sm-9">
+                                            <input class="form-control error" id="cname" name="name" type="text" required="" aria-required="true" aria-invalid="true" placeholder="Max 15 Characters"><label id="cname-error" class="error" for="cname">Please Enter Valid Zone Name</label>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Address/Remarks*</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Address/Remarks">
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-9">
+                                            <label class="cr-styled">
+                                                <input type="checkbox">
+                                                <i class="fa"></i>
+                                                Confirm
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </form>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary">Create Zone</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
+                </div>
+            </div>
+            <!-- End row -->
+            <!--End Create Zone-->
+            <!--Start Edit Zone-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="custom-width-modal5" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h4 class="modal-title" id="custom-width-modalLabel">Edit Zone Details</h4>
+                                </div>
+                                <form class="form-horizontal" role="form">
+                                    <br><br>
+                                    <div class="form-group">
+                                        <label onkeypress='validate(event)' class="col-sm-3 control-label">Name*</label>
+
+
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="inputEmail3" placeholder="Max 15 Characters">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Address/Remarks*</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="inputEmail3" placeholder="Enter Address/Remarks">
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-3 col-sm-9">
+                                            <label class="cr-styled">
+                                                <input type="checkbox">
+                                                <i class="fa"></i>
+                                                Confirm
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </form>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary">Update</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
+                </div>
+            </div>
+            <!-- End row -->
+
+
+            <!--End Edit Zone-->
+
+
+
+        </div>
+    </div>
+    <!-- End row -->
+    <div id="support" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none; overflow-y: auto;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="custom-width-modalLabel">Support</h4>
+                </div>
+                <h2 style="text-align: center; font-weight: 700;"> Need help? Call Us Now </h2>
+                <h3 style="text-align: center;">Toll Free: 1800 200 3242<br> 040 2724 2121</h3>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+    <div id="deleteconfirmation" style="display: none; height: 100px; width: 600px; text-align: center; margin-top: 30px; font-size: 16px">
+        Are you sure to delete the group <br /> <input type="hidden" id="groupsid" /><br /> <img src="images/smallicons/submit_up.png" onclick="deleteGroup();" />&nbsp; &nbsp; <button type="button" class="btn btn-default" onclick="$.fancybox.close();">Close</button>
+    </div>
+
+    <div id="dropdown-2" class="dropdown dropdown-tip" style="font-family: cursive;">
+        <form id="myradiochecker">
+            <ul class="dropdown-menu" style="width: 280px; text-align: left; line-height: 5%;">
+                <li class="dropdown-divider"></li>
+                <li><label><span style="text-align: left;"><input
+							type="radio" name="radio-group" value="Group" />
+							Group &nbsp;&nbsp;&nbsp;&nbsp; </span></label></li>
+                <li><label><span style="text-align: left;"><input
+							type="radio" name="radio-group" value="Switch" checked="true" /> Switch
+							&nbsp;&nbsp; </span></label></li>
+            </ul>
+        </form>
+    </div>
+
+    <div id="movesuccess" style="display: none; width: 500px; text-align: center; margin-top: 30px">
+        <b>Group(s) moved Successfully </b>
+        <br/><br/>
+        <button type="button" class="btn btn-default" onclick="$.fancybox.close();">Close</button>
+    </div>
+    <div id="addedgroupsuccess" style="display: none; width: 500px; text-align: center; margin-top: 30px">
+        <b>Zone Added Successfully </b> <br />
+        <br /> <button type="button" class="btn btn-default" onclick="$.fancybox.close();">Close</button>
+    </div>
+    <div id="updategroupsuccess" style="display: none; width: 500px; text-align: center; margin-top: 30px">
+        <b>Zone Updated Successfully </b> <br />
+        <br /> <button type="button" class="btn btn-default" onclick="$.fancybox.close();">Close</button>
+    </div>
+    <div id="deletesuccess" style="display: none; width: 500px; text-align: center; margin-top: 30px">
+        <b>Zone Deleted Successfully </b> <br />
+        <br /> <button type="button" class="btn btn-default" onclick="$.fancybox.close();">Close</button>
+    </div>
+    <div id="deletefailure_guestcustomer" style="display: none; width: 500px; text-align: center; margin-top: 30px">
+        <b>Guest Customer Cannot perform these action</b> <br />
+        <br /> <button type="button" class="btn btn-default" onclick="$.fancybox.close();">Close</button>
+    </div>
+
+
+
+
+
+    <!-- ================== -->
+
+    <!-- Footer Start -->
+    <footer class="footer">
+        © 2020 - 2022 All rights reserved <a href="http://natureswitch.com/" target="_blank"> Kakatiya Energy Systems Pvt. Ltd</a>
+    </footer>
+    <!-- Footer Ends -->
+
+
+
+    </section>
+    <!-- Main Content Ends -->
+
+
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="files/js/jquery.js"></script>
+    <script src="files/js/bootstrap.min.js"></script>
+    <script src="files/js/modernizr.min.js"></script>
+    <script src="files/js/pace.min.js"></script>
+    <script src="files/js/wow.min.js"></script>
+    <script src="files/js/jquery.scrollTo.min.js"></script>
+    <script src="files/js/jquery.nicescroll.js" type="text/javascript"></script>
+    <script src="files/assets/chat/moment-2.2.1.js"></script>
+
+    <!-- Counter-up -->
+    <script src="files/js/waypoints.min.js" type="text/javascript"></script>
+    <script src="files/js/jquery.counterup.min.js" type="text/javascript"></script>
+
+    <!-- EASY PIE CHART JS -->
+    <script src="files/assets/easypie-chart/easypiechart.min.js"></script>
+    <script src="files/assets/easypie-chart/jquery.easypiechart.min.js"></script>
+    <script src="files/assets/easypie-chart/example.js"></script>
+
+
+    <!--C3 Chart-->
+    <script src="files/assets/c3-chart/d3.v3.min.js"></script>
+    <script src="files/assets/c3-chart/c3.js"></script>
+
+    <!--Morris Chart-->
+    <script src="files/assets/morris/morris.min.js"></script>
+    <script src="files/assets/morris/raphael.min.js"></script>
+
+    <!-- sparkline -->
+    <script src="files/assets/sparkline-chart/jquery.sparkline.min.js" type="text/javascript"></script>
+    <script src="files/assets/sparkline-chart/chart-sparkline.js" type="text/javascript"></script>
+
+    <!-- sweet alerts -->
+    <script src="files/assets/sweet-alert/sweet-alert.min.js"></script>
+    <script src="files/assets/sweet-alert/sweet-alert.init.js"></script>
+
+    <script src="files/js/jquery.app.js"></script>
+    <!-- Chat -->
+    <script src="files/js/jquery.chat.js"></script>
+    <!-- Dashboard -->
+    <script src="files/js/jquery.dashboard.js"></script>
+
+    <!-- Todo -->
+    <script src="files/js/jquery.todo.js"></script>
+
+
+
+    <!-- Add fancyBox main JS and CSS files -->
+    <script type="text/javascript" src="source/jquery.fancybox.js?v=2.1.5"></script>
+    <link rel="stylesheet" type="text/css" href="source/jquery.fancybox.css?v=2.1.5" media="screen" />
+
+    <!-- Add Button helper (this is optional) -->
+    <link rel="stylesheet" type="text/css" href="source/helpers/jquery.fancybox-buttons.css?v=1.0.5" />
+    <script type="text/javascript" src="source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
+
+    <!-- Add Thumbnail helper (this is optional) -->
+    <link rel="stylesheet" type="text/css" href="source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" />
+    <script type="text/javascript" src="source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+
+    <!-- Add Media helper (this is optional) -->
+    <script type="text/javascript" src="source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
+
+
+
+    <script>
+        //production button s
+        function productiondown() {
+            $("#production").attr("src", "images/newproductiondown.png");
+        }
+
+        function productionup() {
+            $("#production").attr("src", "images/newproduction.png");
+        }
+        //Delivered  button s
+        function delivereddown() {
+            $("#delivered").attr("src", "images/newdelivereddown.png");
+        }
+
+        function deliveredup() {
+            $("#delivered").attr("src", "images/newdelivered.png");
+        }
+        //maitenance buttons
+        function maintenancedown() {
+            $("#maintenance").attr("src", "images/newmaintenancedown.png");
+        }
+
+        function maintenanceup() {
+            $("#maintenance").attr("src", "images/newmaintenance.png");
+        }
+        //update marquee change button s
+        function updatemarqueedown() {
+            $("#updatemarquee").attr("src", "images/newupdate_marqueedown.png");
+        }
+
+        function updatemarqueeup() {
+            $("#updatemarquee").attr("src", "images/newupdate_marquee.png");
+        }
+        //addcustomer up image
+        function addcustomerup() {
+            $("#addcustomer").attr("src", "images/newadd_customer.png");
+        }
+
+        function addcustomerdown() {
+            $("#addcustomer").attr("src", "images/newadd_customerdown.png");
+        }
+        //chane switch icon
+        function changeswitchicondown() {
+            $("#switchicon").attr("src", "images/switches_selected.png");
+        }
+
+        function changeswitchiconup() {
+            $("#switchicon").attr("src", "images/switches_normal.png");
+        }
+        //changehelp icon down
+        function changehelpicondown() {
+            $("#helpicon").attr("src", "images/help_ic_selected.png");
+        }
+
+        function changehelpiconup() {
+            $("#helpicon").attr("src", "images/help_ic_normal.png");
+        }
+        //changeuser icon
+        function changeusericondown() {
+            $("#usericon").attr("src", "images/user_ic_selected.png");
+        }
+
+        function changeusericonup() {
+            $("#usericon").attr("src", "images/user_ic_normal.png");
+        }
+
+        function addgroupdown() {
+            $("#addgroup").attr("src", "images/dabuttonfactory/addgroup_down.png");
+        }
+
+        function addgroupup() {
+            $("#addgroup").attr("src", "images/dabuttonfactory/addgroup_up.png");
+        }
+
+        //change report icon
+        function changereporticondown() {
+            $("#reporticon").attr("src", "images/report_selected.png");
+        }
+
+        function changereporticonup() {
+            $("#reporticon").attr("src", "images/report_normal.png");
+        }
+    </script>
+
+    <script type="text/javascript">
+        function editZone(gid) {
+            //alert("edit group "+gid);
+            document.getElementById("groupIDedit").value = "";
+            document.getElementById("groupNameedit").value = "";
+            $("#groupNameedit").removeClass("errorbox");
+            $("#groupNameedit").addClass("textbox");
+            document.getElementById("addressorremarksedit").value = "";
+            document.getElementById("errorgroupnameedit").innerHTML = "";
+
+            $.ajax({
+                type: 'GET',
+                url: "editZone.html",
+                data: "groupID=" + gid,
+                success: function(response) {
+                    var resp = response.split(",");
+                    document.getElementById("groupIDedit").value = resp[0];
+                    document.getElementById("groupNameedit").value = resp[1];
+                    document.getElementById("addressorremarksedit").value = resp[2];
+                    $.fancybox({
+                        beforeClose: function() {
+                            document.getElementById("groupIDedit").value = "";
+                            document.getElementById("groupNameedit").value = "";
+                            document.getElementById("addressorremarksedit").value = "";
+                        },
+                        href: "#inline5",
+                    }).click();
+                    //$.fancybox({href : "#inline1"}).click();
+                },
+                error: function(response) {
+                    alert('failure:' + response);
+                }
+            });
+        }
+
+        function expand(id) {
+            //alert("alert"+id);
+            $('#' + id + 'exp').toggle();
+        }
+
+
+        function addZonetoCustomer() {
+            var gid = $("#groupID").val();
+            var gname = $("#groupName").val();
+            var remarks = $('#addressorremarks').val();
+            if (gname.length == 0 || gname.length > 15) {
+                $('#groupName').removeClass("textbox");
+                $('#groupName').addClass("errorbox");
+                document.getElementById("errorgroupname").innerHTML = "&nbsp; &nbsp; Please Enter Valid Zone name";
+                return;
+            } else {
+                $('#groupName').removeClass("errorbox");
+                $('#groupName').addClass("textbox");
+                document.getElementById("errorgroupname").innerHTML = "";
+            }
+            if (remarks.trim().length == 0) {
+                $('#addressorremarks').removeClass("textbox");
+                $('#addressorremarks').addClass("errorbox");
+                document.getElementById("errorremark").innerHTML = "&nbsp; &nbsp; Please Enter Address ";
+                return;
+            } else {
+                $('#addressorremarks').removeClass("errorbox");
+                $('#addressorremarks').addClass("textbox");
+                document.getElementById("errorremark").innerHTML = "";
+            }
+            var guest_customer = "";
+            //alert("guest_customer"+guest_customer);
+
+
+            $.ajax({
+                type: 'GET',
+                async: false,
+                url: "checkZoneUnique.html",
+                data: "groupName=" + gname,
+                success: function(response) {
+                    if (response == "success") {
+                        $('#groupName').removeClass("textbox");
+                        $('#groupName').addClass("errorbox");
+                        document.getElementById("errorgroupname").innerHTML = "&nbsp; &nbsp; Zone name already exist!";
+                        return;
+                    } else {
+                        //alert(guest_customer);
+                        if (guest_customer.length != 0) {
+                            $.fancybox({
+                                href: "#deletefailure_guestcustomer",
+                            }).click();
+                            return;
+                        }
+                        $.ajax({
+                            type: 'POST',
+                            url: "addZone.html",
+                            data: "groupName=" + gname + "&remarks=" + remarks + "&groupID=" + gid,
+                            success: function(response) {
+                                $.fancybox({
+                                    href: "#addedgroupsuccess",
+                                }).click();
+                            },
+                            error: function(response) {
+                                alert("check Internet connection Error" + response);
+                            }
+                        });
+                    }
+                },
+                error: function(response) {
+                    alert("Error" + response);
+                }
+            });
+
+        }
+
+        function testgroupnameedit() {
+            var name = $("#groupNameedit").val();
+            var id = $("#groupIDedit").val();
+            if (name.length == 0 || name.length > 15) {
+                $("#groupNameedit").removeClass("textbox");
+                $("#groupNameedit").addClass("errorbox");
+                document.getElementById("errorgroupnameedit").innerHTML = "&nbsp; &nbsp; Please Enter Valid Zone name";
+                return;
+            } else {
+                $("#groupNameedit").removeClass("errorbox");
+                $("#groupNameedit").addClass("textbox");
+                document.getElementById("errorgroupnameedit").innerHTML = "";
+                $.ajax({
+                    type: 'GET',
+                    async: false,
+                    url: "checkZoneUniqueedit.html",
+                    data: "groupName=" + name + "&id=" + id,
+                    success: function(response) {
+                        if (response == "success") {
+                            $("#groupNameedit").removeClass("textbox");
+                            $("#groupNameedit").addClass("errorbox");
+                            document.getElementById("errorgroupnameedit").innerHTML = "&nbsp; &nbsp; Zone name exist !";
+                        } else {
+                            $("#groupNameedit").removeClass("errorbox");
+                            $("#groupNameedit").addClass("textbox");
+                            document.getElementById("errorgroupnameedit").innerHTML = "";
+                        }
+                    },
+                    error: function(response) {
+                        alert("Errorrrrr" + response);
+                    }
+                });
+            }
+        }
+
+        function addZonetoCustomeredit() {
+            var gid = $("#groupIDedit").val();
+            var gname = $("#groupNameedit").val();
+            var remarks = $('#addressorremarksedit').val();
+            if (gname.length == 0 || gname.length > 15) {
+                $('#groupNameedit').removeClass("textbox");
+                $('#groupNameedit').addClass("errorbox");
+                document.getElementById("errorgroupnameedit").innerHTML = "&nbsp; &nbsp; Please Enter Valid Zone name";
+                return;
+            } else {
+                $('#groupNameedit').removeClass("errorbox");
+                $('#groupNameedit').addClass("textbox");
+                document.getElementById("errorgroupnameedit").innerHTML = "";
+            }
+            if (remarks.trim().length == 0) {
+                $('#addressorremarksedit').removeClass("textbox");
+                $('#addressorremarksedit').addClass("errorbox");
+                document.getElementById("errorremarkedit").innerHTML = "&nbsp; &nbsp; Please Enter Address ";
+                return;
+            } else {
+                $('#addressorremarksedit').removeClass("errorbox");
+                $('#addressorremarksedit').addClass("textbox");
+                document.getElementById("errorremarkedit").innerHTML = "";
+            }
+            var guest_customer = "";
+            $.ajax({
+                type: 'GET',
+                async: false,
+                url: "checkZoneUniqueedit.html",
+                data: "groupName=" + gname + "&id=" + gid,
+                success: function(response) {
+                    if (response == "success") {
+                        $('#groupNameedit').removeClass("textbox");
+                        $('#groupNameedit').addClass("errorbox");
+                        document.getElementById("errorgroupnameedit").innerHTML = "Zone Name Already Exist";
+                        return;
+                    } else {
+                        if (guest_customer.length != 0) {
+                            $.fancybox({
+                                href: "#deletefailure_guestcustomer",
+                            }).click();
+                            return;
+                        }
+                        $.ajax({
+                            type: 'POST',
+                            url: "editZoneRecord.html",
+                            data: "groupName=" + gname + "&remarks=" + remarks + "&groupID=" + gid,
+                            success: function(response) {
+                                $.fancybox({
+                                    href: "#updategroupsuccess",
+                                }).click();
+                            },
+                            error: function(response) {
+                                alert("check Internet connection Error" + response);
+                            }
+                        });
+                    }
+                },
+                error: function(response) {
+                    alert("Error" + response);
+                }
+            });
+
+        }
+
+        function deleteconfirmation() {
+            var id = document.getElementById("groupIDedit").value;
+            //alert("hello"+id);
+            document.getElementById("groupsid").value = id;
+            $.fancybox({
+                href: "#deleteconfirmation",
+            }).click();
+        }
+
+        function deleteGroup() {
+
+            var gid = document.getElementById("groupsid").value;
+            //alert("delete Group "+gid);
+
+            var guest_customer = "";
+
+            //alert("guest_customer"+guest_customer);
+
+            if (guest_customer.length != 0) {
+                $.fancybox({
+                    href: "#deletefailure_guestcustomer",
+                }).click();
+                return;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: "deleteGroup.html",
+                data: "groupID=" + gid,
+                success: function(response) {
+                    //alert('success:'+response);
+                    if (response == "false") {
+                        alert("Pre-installation group cannot be Deleted");
+                    } else {
+                        $.fancybox({
+                            href: "#deletesuccess",
+                        }).click();
+                    }
+                },
+                failure: function(response) {
+                    alert('failure:' + response);
+                }
+            });
+        }
+
+        function moveSwitchToGroups() {
+            $.ajax({
+                type: 'POST',
+                data: 'zoneId=' + rightGroupID + '&groups=' + arr,
+                url: 'moveGroups.html',
+                success: function(response) {
+                    //alert("Groups moved "+ response+"fully");
+                    //window.location.href("customerAdmin.html");
+                    $.fancybox.open({
+                        autoScale: true,
+                        autoSize: true,
+                        href: '#movesuccess',
+                    });
+                },
+                failure: function() {
+                    alert(response);
+                }
+            });
+
+        }
+
+        function testgroupname() {
+            var name = $("#groupName").val();
+            if (name.length == 0 || name.length > 15) {
+                $("#groupName").removeClass("textbox");
+                $("#groupName").addClass("errorbox");
+                document.getElementById("errorgroupname").innerHTML = "&nbsp; &nbsp; Please Enter Valid Zone name";
+                return;
+            } else {
+                $("#groupName").removeClass("errorbox");
+                $("#groupName").addClass("textbox");
+                document.getElementById("errorgroupname").innerHTML = "";
+                $.ajax({
+                    type: 'GET',
+                    async: false,
+                    url: "checkGroupUnique.html",
+                    data: "groupName=" + name,
+                    success: function(response) {
+                        if (response == "success") {
+                            $("#groupName").removeClass("textbox");
+                            $("#groupName").addClass("errorbox");
+                            document.getElementById("errorgroupname").innerHTML = "&nbsp; &nbsp; Zone name exist !";
+                        } else {
+                            $("#groupName").removeClass("errorbox");
+                            $("#groupName").addClass("textbox");
+                            document.getElementById("errorgroupname").innerHTML = "";
+                        }
+                    },
+                    error: function(response) {
+                        alert("Errorrrrr" + response);
+                    }
+                });
+
+            }
+        }
+
+        function doAjaxPost() {
+            var gid = $("#groupID").val();
+            var gname = $("#groupName").val();
+            var remarks = $('#remarks').val();
+            if (gname.length == 0 || gname.length > 15) {
+                $('#groupName').removeClass("textbox");
+                $('#groupName').addClass("errorbox");
+                document.getElementById("errorname").innerHTML = "&nbsp; &nbsp; Please Enter Valid Zone name";
+                return;
+            } else {
+                $('#groupName').removeClass("errorbox");
+                $('#groupName').addClass("textbox");
+                document.getElementById("errorname").innerHTML = "";
+            }
+            if (remarks.match(/[^a-zA-Z]/g) || remarks.length == 0) {
+                $('#remarks').removeClass("textbox");
+                $('#remarks').addClass("errorbox");
+                document.getElementById("errorremark").innerHTML = "&nbsp; &nbsp; Please Enter Valid Zone name";
+                return;
+            } else {
+                $('#remarks').removeClass("errorbox");
+                $('#remarks').addClass("textbox");
+                document.getElementById("errorremark").innerHTML = "";
+            }
+            $.ajax({
+                type: 'GET',
+                async: false,
+                url: "checkGroupUnique.html",
+                data: "groupName=" + gname,
+                success: function(response) {
+                    if (response == "success") {
+                        $.ajax({
+                            type: 'POST',
+                            url: "addGroup.html",
+                            data: "groupName=" + gname + "&remarks=" + remarks + "&groupID=" + gid,
+                            success: function(response) {
+                                window.location.reload();
+                            },
+                            error: function(response) {
+                                alert("check Internet connection Errorrrrr" + response);
+                            }
+                        });
+                        document.getElementById("groupnameexist").innerHTML = "";
+                    } else {
+                        document.getElementById("groupnameexist").innerHTML = "Zone Name Already Exist";
+                        return;
+                    }
+                },
+                error: function(response) {
+                    alert("Errorrrrr" + response);
+                }
+            });
+        }
+
+        $(document).ready(
+            function() {
+                /*
+                 *  Simple image gallery. Uses default settings
+                 */
+
+                $('.fancybox').fancybox({
+                    beforeClose: function() {
+                        document.getElementById("groupID").value = "";
+                        document.getElementById("groupName").value = "";
+                        document.getElementById("addressorremarks").value = "";
+                    }
+                });
+
+                /*
+                 *  Different effects
+                 */
+
+                // Change title type, overlay closing speed
+                $(".fancybox-effects-a").fancybox({
+                    helpers: {
+                        title: {
+                            type: 'outside'
+                        },
+                        overlay: {
+                            speedOut: 0
+                        }
+                    }
+                });
+
+                // Disable opening and closing animations, change title type
+                $(".fancybox-effects-b").fancybox({
+                    openEffect: 'none',
+                    closeEffect: 'none',
+
+                    helpers: {
+                        title: {
+                            type: 'over'
+                        }
+                    }
+                });
+
+                // Set custom style, close if clicked, change title type and overlay color
+                $(".fancybox-effects-c").fancybox({
+                    wrapCSS: 'fancybox-custom',
+                    closeClick: true,
+
+                    openEffect: 'none',
+
+                    helpers: {
+                        title: {
+                            type: 'inside'
+                        },
+                        overlay: {
+                            css: {
+                                'background': 'rgba(238,238,238,0.85)'
+                            }
+                        }
+                    }
+                });
+
+                // Remove padding, set opening and closing animations, close if clicked and disable overlay
+                $(".fancybox-effects-d").fancybox({
+                    padding: 0,
+
+                    openEffect: 'elastic',
+                    openSpeed: 150,
+
+                    closeEffect: 'elastic',
+                    closeSpeed: 150,
+
+                    closeClick: true,
+
+                    helpers: {
+                        overlay: null
+                    }
+                });
+
+                /*
+                 *  Button helper. Disable animations, hide close button, change title type and content
+                 */
+
+                $('.fancybox-buttons')
+                    .fancybox({
+                        openEffect: 'none',
+                        closeEffect: 'none',
+
+                        prevEffect: 'none',
+                        nextEffect: 'none',
+
+                        closeBtn: false,
+
+                        helpers: {
+                            title: {
+                                type: 'inside'
+                            },
+                            buttons: {}
+                        },
+
+                        afterLoad: function() {
+                            this.title = 'Image ' +
+                                (this.index + 1) +
+                                ' of ' +
+                                this.group.length +
+                                (this.title ? ' - ' +
+                                    this.title : '');
+                        }
+                    });
+
+                /*
+                 *  Thumbnail helper. Disable animations, hide close button, arrows and slide to next gallery item if clicked
+                 */
+
+                $('.fancybox-thumbs').fancybox({
+                    prevEffect: 'none',
+                    nextEffect: 'none',
+
+                    closeBtn: false,
+                    arrows: false,
+                    nextClick: true,
+
+                    helpers: {
+                        thumbs: {
+                            width: 50,
+                            height: 50
+                        }
+                    }
+                });
+
+                /*
+                 *  Media helper. Group items, disable animations, hide arrows, enable media and button helpers.
+                 */
+                $('.fancybox-media').attr('rel', 'media-gallery').fancybox({
+                    openEffect: 'none',
+                    closeEffect: 'none',
+                    prevEffect: 'none',
+                    nextEffect: 'none',
+
+                    arrows: false,
+                    helpers: {
+                        media: {},
+                        buttons: {}
+                    }
+                });
+
+                /*
+                 *  Open manually
+                 */
+
+                $("#fancybox-manual-a").click(function() {
+                    $.fancybox.open('1_b.jpg');
+                });
+
+                $("#fancybox-manual-b").click(function() {
+                    $.fancybox.open({
+                        href: 'iframe.html',
+                        type: 'iframe',
+                        padding: 5
+                    });
+                });
+
+                $("#fancybox-manual-c").click(function() {
+                    $.fancybox.open([{
+                        href: '1_b.jpg',
+                        title: 'My title'
+                    }, {
+                        href: '2_b.jpg',
+                        title: '2nd title'
+                    }, {
+                        href: '3_b.jpg'
+                    }], {
+                        helpers: {
+                            thumbs: {
+                                width: 75,
+                                height: 50
+                            }
+                        }
+                    });
+                });
+
+            });
+    </script>
+    <script>
+        $(document).ready(function() {
+            var guest_customer = "";
+            if (guest_customer.length == 0) {
+                //alert("guest customer");
+
+                //alert(document.cookie);
+
+                $('#instruct').remove();
+                $('#main').show();
+
+
+            }
+            /* if(guest_customer.length!=0)
+            {
+            		if(document.cookie.length!=0){
+            		document.cookie='name=customerseen';
+            		}
+            		//alert(document.cookie.length);
+            		if(document.cookie.length!=0){
+            		$('#instruct').remove();
+            		$('#main').show();
+            		}
+            } */
+
+
+            var stickyNavTop = $('.nav').offset().top;
+
+            var stickyNav = function() {
+                var scrollTop = $(window).scrollTop();
+
+                if (scrollTop > stickyNavTop) {
+                    $('.nav').addClass('sticky');
+                } else {
+                    $('.nav').removeClass('sticky');
+                }
+            };
+
+            stickyNav();
+
+            $(window).scroll(function() {
+                stickyNav();
+            });
+        });
+    </script>
+    <script>
+        var rightGroupID;
+
+        function addMoveSwitches(cid) {
+            $.ajax({
+                type: 'GET',
+                data: 'customer_details_id=' + cid,
+                url: 'getZones.html',
+                success: function(response) {
+                    var getValues = JSON.parse(response);
+                    console.dir(getValues);
+                    var select_result = '<select name="getGroup" id="getGroup" onchange="getSwitchesLeft(this.value)">';
+                    var select_result1 = '<select name="getGroup1" id="getGroup1" onchange="getSwitchesRight(this.value)">';
+
+                    select_result += '<option value="Select">Select</option>';
+                    select_result1 += '<option value="Select">Select</option>';
+                    for (var i = 0; i < getValues.Zones.length; i++) {
+                        select_result += '<option value="' + getValues.Zones[i].groupID + '">' + getValues.Zones[i].groupName + '</option>';
+                        //alert(getValues.Groups[i].groupID +" Group Name  :"+getValues.Groups[i].groupName);
+                        select_result1 += '<option value="' + getValues.Zones[i].groupID + '">' + getValues.Zones[i].groupName + '</option>';
+                    }
+                    select_result += '</select>';
+                    select_result1 += '</select>';
+                    document.getElementById("group_result").innerHTML = select_result;
+                    document.getElementById("group_result1").innerHTML = select_result1;
+
+                    $.fancybox({
+                        beforeClose: function() {
+                            document.getElementById("switchesLeft").value = select_result;
+                            document.getElementById("switchesLeft").value = select_result;
+
+                        },
+                        href: "#inline3",
+                    }).click();
+
+                    //group_result
+                },
+                failure: function() {
+                    alert('failure');
+                }
+            });
+        }
+        var arr = new Array();
+
+        function moveSwitches() {
+            //alert(rightGroupID);
+            var grouprightvalue = document.getElementById('getGroup1').value;
+            var groupleftvalue = document.getElementById('getGroup').value;
+
+
+            if (groupleftvalue == "Select") {
+                alert("Please Select Source. Zone");
+
+            } else if (grouprightvalue == "Select") {
+                alert("Please Select Dest. Zone");
+            } else if (grouprightvalue == groupleftvalue) {
+                alert("Please Select  Soure and Dest. Zone should not same");
+            } else {
+                var SwitchesLeftBoxObj = document.getElementById('SwitchesLeftBox');
+                var SwitchesRightBoxObj = document.getElementById('SwitchesRightBox');
+
+                var i = 0;
+                //iterate through each option of the listbox
+                for (var count = SwitchesLeftBoxObj.options.length - 1; count >= 0; count--) {
+
+                    //if the option is selected, delete the option
+                    if (SwitchesLeftBoxObj.options[count].selected == true) {
+
+                        try {
+
+                            //alert(SwitchesLeftBoxObj.options[count].value);
+
+                            // Add an Option object to Drop Down/List Box
+                            // Assign text and value to Option object
+                            var opt = document.createElement("option");
+                            opt.text = SwitchesLeftBoxObj.options[count].text;
+                            opt.value = SwitchesLeftBoxObj.options[count].value;
+                            opt.disabled = true;
+                            SwitchesRightBoxObj.options.add(opt);
+                            arr[i++] = SwitchesLeftBoxObj.options[count].value;
+                            SwitchesLeftBoxObj.remove(count, null);
+
+                        } catch (error) {
+                            // Add an Option object to Drop Down/List Box
+                            var opt = document.createElement("option");
+                            opt.text = SwitchesLeftBoxObj.options[count].text;
+                            opt.value = SwitchesLeftBoxObj.options[count].value;
+                            opt.disabled = true;
+                            SwitchesRightBoxObj.options.add(opt);
+
+                            // Assign text and value to Option object
+
+
+                            SwitchesLeftBoxObj.remove(count);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        function getSwitchesLeft(groupID) {
+            //alert("getSwitches Aler5t"+ groupID);
+            if (groupID == "Select") {
+                var select_result = '<select name="SwitchesLeftBox" id="SwitchesLeftBox"  multiple style="width:150px;height:200px;float:left">';
+                select_result += '</select>';
+                document.getElementById("switchesLeft").innerHTML = select_result;
+            } else {
+                $.ajax({
+                    type: 'GET',
+                    data: 'zoneId=' + groupID,
+                    url: 'getZoneGroups.html',
+                    success: function(response) {
+                        //alert(response);
+                        if (response == "null") {
+                            var select_result = '<select name="SwitchesLeftBox" id="SwitchesLeftBox"  multiple style="width:150px;height:200px;float:left">';
+                            select_result += '</select>';
+                            document.getElementById("switchesLeft").innerHTML = select_result;
+                        } else {
+                            //response="{\"Groups\": "+response+"}";
+                            var getValues = JSON.parse(response);
+                            var select_result = '<select name="SwitchesLeftBox" id="SwitchesLeftBox"  multiple  style="width:150px;height:200px;float:left">';
+                            for (var i = 0; i < getValues.Groups.length; i++) {
+                                select_result += '<option value="' + getValues.Groups[i].groupID + '">' + getValues.Groups[i].groupName + '</option>';
+                                //alert(getValues.Groups[i].groupID +" Group Name  :"+getValues.Groups[i].groupName);
+                            }
+                            select_result += '</select>';
+                            document.getElementById("switchesLeft").innerHTML = select_result;
+                        }
+                    },
+                    failure: function() {
+                        alert(response);
+                    }
+                });
+            }
+
+        }
+
+        function getSwitchesRight(groupID) {
+            rightGroupID = groupID;
+            //alert("getSwitches Aler5t"+ groupID);
+            if (groupID == "Select") {
+                var select_result1 = '<select name="SwitchesRightBox" id="SwitchesRightBox"  multiple style="width:150px;height:200px;float:left">';
+                select_result1 += '</select>';
+                document.getElementById("switchesRight").innerHTML = select_result1;
+            } else {
+                $.ajax({
+                    type: 'GET',
+                    data: 'zoneId=' + groupID,
+                    url: 'getZoneGroups.html',
+                    success: function(response) {
+                        if (response == "null") {
+                            var select_result1 = '<select name="SwitchesRightBox" id="SwitchesRightBox"  multiple style="width:150px;height:200px;float:left">';
+                            select_result1 += '</select>';
+                            document.getElementById("switchesRight").innerHTML = select_result1;
+                        } else {
+                            //response="{\"Groups\": "+response+"}";
+                            var getValues = JSON.parse(response);
+                            var select_result1 = '<select name="SwitchesRightBox" id="SwitchesRightBox" multiple style="width:150px;height:200px;float:left">';
+
+
+                            for (var i = 0; i < getValues.Groups.length; i++) {
+                                //alert(getValues.Groups[i].groupID +" Group Name  :"+getValues.Groups[i].groupName);
+                                select_result1 += '<option  disabled value="' + getValues.Groups[i].groupID + '">' + getValues.Groups[i].groupName + '</option>';
+                            }
+                            select_result1 += '</select>';
+                            document.getElementById("switchesRight").innerHTML = select_result1;
+                        }
+                    },
+                    failure: function() {
+                        alert(response);
+                    }
+                });
+            }
+        }
+
+
+        /* function selectSwitchesLeft(sID){
+        	alert(sID);
+        }
+        function selectSwitchesRight(sID){
+        	alert(sID);
+        }
+         */
+        //changepassword
+        function changepassword() {
+            var oldpassword = document.getElementById("oldpassword").value;
+            var password1 = document.getElementById("changepassword1").value;
+            var password2 = document.getElementById("changepassword2").value;
+            if (password1.length < 6 || password1 != password2) {
+                $('#oldpassword').removeClass("textbox");
+                $('#oldpassword').addClass("errorbox");
+                $('#changepassword1').removeClass("textbox");
+                $('#changepassword1').addClass("errorbox");
+                $('#changepassword2').removeClass("textbox");
+                $('#changepassword2').addClass("errorbox");
+                document.getElementById("errorchangepasswordmain").innerHTML = "Invalid Password";
+            } else {
+                $('#oldpassword').removeClass("errorbox");
+                $('#oldpassword').addClass("textbox");
+                $('#changepassword1').removeClass("errorbox");
+                $('#changepassword1').addClass("textbox");
+                $('#changepassword2').removeClass("errorbox");
+                $('#changepassword2').addClass("textbox");
+                document.getElementById("errorchangepasswordmain").innerHTML = "";
+                var guest_customer = "";
+                if (guest_customer.length != 0) {
+                    $.fancybox({
+                        href: "#deletefailure_guestcustomer",
+                    }).click();
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "changepassword.html",
+                    data: "oldpassword=" + oldpassword + "&password=" + password1,
+                    success: function(response) {
+                        if (response == "success") {
+                            document.getElementById("changepasswordsuccess").innerHTML = "Password changed succesfully";
+                            $.fancybox({
+                                href: "#changepasswordsuccess"
+                            }).click();
+                        } else {
+                            document.getElementById("changepasswordfailure").innerHTML = "Sorry Mismatch in older password";
+                            $.fancybox({
+                                href: "#changepasswordfailure"
+                            }).click();
+                        }
+                    },
+                    error: function(response) {
+                        alert('Error: ' + response);
+                    }
+                });
+            }
+
+        }
+
+        function validateoldpassword() {
+            var password1 = document.getElementById("oldpassword").value;
+            if (password1.length < 6) {
+                $('#oldpassword').removeClass("textbox");
+                $('#oldpassword').addClass("errorbox");
+                document.getElementById("erroroldpassword").innerHTML = "Minimum 6 characters";
+            } else {
+                $('#oldpassword').removeClass("errorbox");
+                $('#oldpassword').addClass("textbox");
+                document.getElementById("erroroldpassword").innerHTML = "";
+            }
+
+        }
+
+        function validatepassword() {
+            var password1 = document.getElementById("changepassword1").value;
+            if (password1.length < 6) {
+                $('#changepassword1').removeClass("textbox");
+                $('#changepassword1').addClass("errorbox");
+                document.getElementById("errorchangepassword1").innerHTML = "Minimum 6 characters";
+            } else {
+                $('#changepassword1').removeClass("errorbox");
+                $('#changepassword1').addClass("textbox");
+                document.getElementById("errorchangepassword1").innerHTML = "";
+            }
+
+        }
+
+        function validateretypepassword() {
+            var password1 = document.getElementById("changepassword1").value;
+            var password2 = document.getElementById("changepassword2").value;
+            if (password1 != password2) {
+                $('#changepassword2').removeClass("textbox");
+                $('#changepassword2').addClass("errorbox");
+                document.getElementById("errorchangepassword2").innerHTML = "Password Mismatch";
+            } else {
+                $('#changepassword2').removeClass("errorbox");
+                $('#changepassword2').addClass("textbox");
+                document.getElementById("errorchangepassword2").innerHTML = "";
+            }
+        }
+    </script>
+
+
+    <script>
+        function fancyboxclose() {
+            window.location.reload();
+        }
+
+        function supportiframe() {
+            $.fancybox.open({
+                autoSize: false,
+                autoScale: true,
+                href: 'supportiframe.html',
+                type: 'iframe',
+                padding: 5
+            });
+        }
+    </script>
+    <script>
+        function getsearch() {
+            //alert("value");
+            var customervalue = $('input[name=radio-group]:checked', '#myradiochecker').val();
+            var searchtext = document.getElementById("searchtext").value;
+            //alert(customervalue+"---->"+searchtext);
+            //window.location="searcherCustomer.html?searchin="+customervalue+"&searchtext="+searchtext;
+            if (searchtext.length > 0) {
+                window.location = "searcherCustomer.html?searchin=" + customervalue + "&searchtext=" + searchtext;
+            } else {
+                document.getElementById("searchtext").placeholder = "Please Enter Valid Data";
+            }
+        }
+
+        function checkenter(event) {
+            if (event.keyCode == 13) {
+                getsearch();
+            }
+        }
+    </script>
+
+
+    <script>
+        function showhomepage() {
+            $('#instruct').remove();
+
+            $('#main').show();
+            $.fancybox({
+                href: "#pagehelp",
+            }).click();
+
+        }
+
+        function openreportdatepicker() {
+            $.fancybox.open({
+                href: 'report.html',
+                type: 'iframe',
+                padding: 5,
+
+            });
+        }
+
+        function customerSettings() {
+            //window.alert("inside settings");
+            $.fancybox.open({
+                href: 'settingsiframe.html',
+                type: 'iframe',
+            });
+        }
+
+
+
+        //Dashboard settings
+        function saveDashboardSettings() {
+            var previouskWh = document.getElementById("previouskwh").value;
+            var unitPrice = document.getElementById("unitprice").value;
+            var co2 = document.getElementById("co2").value;
+            $.ajax({
+                type: "POST",
+                url: "saveDashboardSettings.html",
+                data: "previouskwh=" + previouskWh + "&unitprice=" + unitPrice + "&co2=" + co2,
+                success: function(response) {
+                    if (response == "success") {
+                        document.getElementById("dashboardsavesuccess").innerHTML = "Settings Saved succesfully";
+                        $.fancybox({
+                            href: "#dashboardsavesuccess"
+                        }).click();
+                    } else {
+                        document.getElementById("dashboardsavefailure").innerHTML = "Sorry Failed to Save Settings";
+                        $.fancybox({
+                            href: "#dashboardsavefailure"
+                        }).click();
+                    }
+                },
+                error: function(response) {
+                    alert('Error: ' + response);
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
