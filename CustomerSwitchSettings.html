@@ -1,0 +1,413 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+  <title>Switch Settings</title>
+  <style>
+    #loader {
+      transition: all .3s ease-in-out;
+      opacity: 1;
+      visibility: visible;
+      position: fixed;
+      height: 100vh;
+      width: 100%;
+      background: #fff;
+      z-index: 90000
+    }
+
+    #loader.fadeOut {
+      opacity: 0;
+      visibility: hidden
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      top: calc(50% - 20px);
+      left: calc(50% - 20px);
+      background-color: #333;
+      border-radius: 100%;
+      -webkit-animation: sk-scaleout 1s infinite ease-in-out;
+      animation: sk-scaleout 1s infinite ease-in-out
+    }
+
+    @-webkit-keyframes sk-scaleout {
+      0% {
+        -webkit-transform: scale(0)
+      }
+
+      100% {
+        -webkit-transform: scale(1);
+        opacity: 0
+      }
+    }
+
+    @keyframes sk-scaleout {
+      0% {
+        -webkit-transform: scale(0);
+        transform: scale(0)
+      }
+
+      100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 0
+      }
+    }
+
+    .sidebar-inner {
+      background: -webkit-linear-gradient(bottom, #004085, #00c6fb);
+    }
+
+    .navbar {
+      background: -webkit-linear-gradient(right, #004085, #00c6fb);
+    }
+
+    .sidebar-menu li a {
+      color: white !important;
+    }
+
+    .c-red-500,
+    .cH-red-500:hover {
+      color: white !important;
+    }
+
+    #pie_chart span#chartobject-1 {
+      height: 341px !important;
+    }
+
+    #pie_charts span#chartobject-2 {
+      height: 341px !important;
+    }
+  </style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+  <script type="text/javascript"
+    src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+  <link href="style.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script>
+    $(function () {
+      $("#navigation").load("navigation.html");
+    });
+  </script>
+</head>
+
+<body class="app">
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+  <script>
+    window.addEventListener('load', function load() {
+      const loader = document.getElementById('loader');
+      setTimeout(function () {
+        loader.classList.add('fadeOut');
+      }, 300);
+    });
+  </script>
+  <div>
+    <div class="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-logo">
+          <div class="peers ai-c fxw-nw">
+            <div class="peer peer-greed"><a class="sidebar-link td-n" href="index.html">
+                <div class="peers ai-c fxw-nw">
+                  <div class="peer">
+                    <div class="logo"><img src="assets/static/images/logo.png" alt=""
+                        style="width: 250px;margin-top: 3px;"></div>
+                  </div>
+                </div>
+              </a></div>
+            <div class="peer">
+              <div class="mobile-toggle sidebar-toggle"><a href="" class="td-n"><i class="ti-arrow-circle-left"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="sidebar-menu scrollable pos-r" id="navigation"></ul>
+      </div>
+    </div>
+    <div class="page-container">
+      <div class="header navbar">
+        <div class="header-container">
+          <ul class="nav-left">
+            <li><a id="sidebar-toggle" class="sidebar-toggle" href="javascript:void(0);"><i class="ti-menu"></i></a>
+            </li>
+            <li class="search-box"><a class="search-toggle no-pdd-right" href="javascript:void(0);"><i
+                  class="search-icon ti-search pdd-right-10"></i> <i
+                  class="search-icon-close ti-close pdd-right-10"></i></a></li>
+            <li class="search-input"><input class="form-control" type="text" placeholder="Search..."></li>
+          </ul>
+          <ul class="nav-right">
+            <li class="notifications dropdown"><span class="counter bgc-red">3</span> <a href=""
+                class="dropdown-toggle no-after" data-toggle="dropdown"><i class="ti-bell"></i></a>
+              <ul class="dropdown-menu">
+                <li class="pX-20 pY-15 bdB"><i class="ti-bell pR-10"></i> <span
+                    class="fsz-sm fw-600 c-grey-900">Notifications</span></li>
+                <li>
+                  <ul class="ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
+                    <li><a href="" class="peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100">
+                        <div class="peer mR-15"><img class="w-3r bdrs-50p" src="#" alt=""></div>
+                        <div class="peer peer-greed"><span><span class="fw-500">John Doe</span> <span
+                              class="c-grey-600">liked your <span class="text-dark">post</span></span></span>
+                          <p class="m-0"><small class="fsz-xs">5 mins ago</small></p>
+                        </div>
+                      </a></li>
+                    <li><a href="" class="peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100">
+                        <div class="peer mR-15"><img class="w-3r bdrs-50p" src="#" alt=""></div>
+                        <div class="peer peer-greed"><span><span class="fw-500">Moo Doe</span> <span
+                              class="c-grey-600">liked your <span class="text-dark">cover image</span></span></span>
+                          <p class="m-0"><small class="fsz-xs">7 mins ago</small></p>
+                        </div>
+                      </a></li>
+                    <li><a href="" class="peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100">
+                        <div class="peer mR-15"><img class="w-3r bdrs-50p" src="#" alt=""></div>
+                        <div class="peer peer-greed"><span><span class="fw-500">Lee Doe</span> <span
+                              class="c-grey-600">commented on your <span class="text-dark">video</span></span></span>
+                          <p class="m-0"><small class="fsz-xs">10 mins ago</small></p>
+                        </div>
+                      </a></li>
+                  </ul>
+                </li>
+                <li class="pX-20 pY-15 ta-c bdT"><span><a href="" class="c-grey-600 cH-blue fsz-sm td-n">View All
+                      Notifications <i class="ti-angle-right fsz-xs mL-10"></i></a></span></li>
+              </ul>
+            </li>
+            <li class="notifications dropdown"><span class="counter bgc-blue">3</span> <a href=""
+                class="dropdown-toggle no-after" data-toggle="dropdown"><i class="ti-email"></i></a>
+              <ul class="dropdown-menu">
+                <li class="pX-20 pY-15 bdB"><i class="ti-email pR-10"></i> <span
+                    class="fsz-sm fw-600 c-grey-900">Emails</span></li>
+                <li>
+                  <ul class="ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
+                    <li><a href="" class="peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100">
+                        <div class="peer mR-15"><img class="w-3r bdrs-50p" src="#" alt=""></div>
+                        <div class="peer peer-greed">
+                          <div>
+                            <div class="peers jc-sb fxw-nw mB-5">
+                              <div class="peer">
+                                <p class="fw-500 mB-0">John Doe</p>
+                              </div>
+                              <div class="peer"><small class="fsz-xs">5 mins ago</small></div>
+                            </div><span class="c-grey-600 fsz-sm">Want to create your own customized data generator for
+                              your app...</span>
+                          </div>
+                        </div>
+                      </a></li>
+                    <li><a href="" class="peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100">
+                        <div class="peer mR-15"><img class="w-3r bdrs-50p" src="#" alt=""></div>
+                        <div class="peer peer-greed">
+                          <div>
+                            <div class="peers jc-sb fxw-nw mB-5">
+                              <div class="peer">
+                                <p class="fw-500 mB-0">Moo Doe</p>
+                              </div>
+                              <div class="peer"><small class="fsz-xs">15 mins ago</small></div>
+                            </div><span class="c-grey-600 fsz-sm">Want to create your own customized data generator for
+                              your app...</span>
+                          </div>
+                        </div>
+                      </a></li>
+                    <li><a href="" class="peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100">
+                        <div class="peer mR-15"><img class="w-3r bdrs-50p" src="#" alt=""></div>
+                        <div class="peer peer-greed">
+                          <div>
+                            <div class="peers jc-sb fxw-nw mB-5">
+                              <div class="peer">
+                                <p class="fw-500 mB-0">Lee Doe</p>
+                              </div>
+                              <div class="peer"><small class="fsz-xs">25 mins ago</small></div>
+                            </div><span class="c-grey-600 fsz-sm">Want to create your own customized data generator for
+                              your app...</span>
+                          </div>
+                        </div>
+                      </a></li>
+                  </ul>
+                </li>
+                <li class="pX-20 pY-15 ta-c bdT"><span><a href="#" class="c-grey-600 cH-blue fsz-sm td-n">View
+                      All Email <i class="fs-xs ti-angle-right mL-10"></i></a></span></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="" class="dropdown-toggle no-after peers fxw-nw ai-c lh-1"
+                data-toggle="dropdown">
+                <div class="peer mR-10"><img class="w-2r bdrs-50p" src="#" alt=""></div>
+                <div class="peer"><span class="fsz-sm c-grey-900">John Doe</span></div>
+              </a>
+              <ul class="dropdown-menu fsz-sm">
+                <li><a href="" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-settings mR-10"></i>
+                    <span>Setting</span></a></li>
+                <li><a href="" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-user mR-10"></i>
+                    <span>Profile</span></a></li>
+                <li><a href="#" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-email mR-10"></i>
+                    <span>Messages</span></a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700"><i class="ti-power-off mR-10"></i>
+                    <span>Logout</span></a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <main class="main-content bgc-grey-100">
+        <div id="mainContent">
+          <div class="container-fluid">
+            <h4 class="c-grey-900 mT-10 mB-30">Zones/Groups Settings</h4>
+
+            <div class="row">
+
+              <div class="col-md-12">
+                <button type="button" class="btn cur-p btn-primary" style="margin-bottom: 10px;">View on Map <i
+                    class="fa fa-map"></i></button>
+                <button type="button" class="btn cur-p btn-primary"
+                  style="margin-left: 10px;margin-bottom: 10px;">Change SMS User <i class="fa fa-user"></i></button>
+                <button type="button" class="btn cur-p btn-primary"
+                  style="margin-left: 10px;margin-bottom: 10px;">Control Settings &nbsp;<i
+                    class="fa fa-wrench"></i></button>
+                <button type="button" class="btn cur-p btn-primary" style="margin-left: 10px;margin-bottom: 10px;">Meter
+                  Settings&nbsp;<i class="fa fa-key"></i></button>
+                <button type="button" class="btn cur-p btn-primary" style="margin-left: 10px;margin-bottom: 10px;">Data
+                  Report&nbsp;<i class="fa fa-file-excel"></i></button>
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+
+                  <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                      <tr>
+                        <th><input type="checkbox"></th>
+                        <th>SNo.</th>
+                        <th>Group Name</th>
+                        <th>Switch Details</th>
+                        <th>View/Edit Location</th>
+                        <th>Control Status</th>
+                        <th>Energy Data</th>
+                        <th>Settings</th>
+                        <th>Lamp Details</th>
+                        <th>Message Log</th>
+                        <th>Energy Data Log</th>
+                        <th><i class="fa fa-flag"></i></th>
+                      </tr>
+                    </thead>
+                    <!-- <tfoot>
+                      <tr>
+                        <th>SNo.</th>
+                        <th>Group Name</th>
+                        <th>teambhongir<br />Click to Edit</th>
+                        <th>Web User 2<br />Click to Edit</th>
+                        <th>Web User 3<br />Click to Edit</th>
+                        <th>Web User 4<br />Click to Edit</th>
+                        <th>Web User 5<br />Click to Edit</th>
+                      </tr>
+                    </tfoot> -->
+                    <tbody>
+                      <tr>
+                        <th><input type="checkbox"></th>
+                        <td>1</td>
+                        <td>Jan1st</td>
+                        <td>
+                          <pre>
+<b>Address</b>: Banjara hill krushi iti
+<b>UID</b>: 24013
+<b>Master ID</b>: 489
+<b>Mapped ID</b>: 28
+<b>Last Updated At</b>: 12/03/2021 09:27</pre>
+                        </td>
+                        <td><img src="map-marker.png" alt="Edit Location" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="Edit Location">
+                          <img src="map-direction.png" alt="Get Direction" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="Get Direction"></td>
+                        <td>
+                          <pre>
+<b>Status At</b>: 12/03/2021 09:27
+<b>Load ON/OFF Status</b>:LIGHTS OFF
+<b>Active Alerts</b>:
+<b>Operational mode </b>:</pre>
+                          <img src="refresh.png" alt="Update" data-toggle="tooltip" data-placement="top" title=""
+                            data-original-title="Update"></td>
+                        <td>Updated at:
+                          12/03/2021 09:21
+                          1-Phase
+                          <img src="refresh.png" alt="Update" data-toggle="tooltip" data-placement="top" title=""
+                            data-original-title="Update"></td>
+                        <td><img src="settings.png" alt="Settings" data-toggle="tooltip" data-placement="top" title=""
+                            data-original-title="Settings"></td>
+                        <td><img src="lights.png" alt="View/Edit Lamp Details" data-toggle="tooltip"
+                            data-placement="top" title="" data-original-title="View/Edit Lamp Details"></td>
+                        <td><img src="download.png" alt="Download Excel file" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="Download Excel file">
+                          <img src="mail.png" alt="View Recent Messages" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="View Recent Messages"></td>
+                        <td><img src="download.png" alt="Download Excel file" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="Download Excel file">
+                          <img src="mail.png" alt="View Recent Messages" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="View Recent Messages"></td>
+                            <td>RF</td>
+                      </tr>
+                      <tr>
+                        <th><input type="checkbox"></th>
+                        <td>2</td>
+                        <td>Jan1st</td>
+                        <td>
+                          <pre>
+<b>Address</b>: Banjara hill krushi iti
+<b>UID</b>: 24013
+<b>Master ID</b>: 489
+<b>Mapped ID</b>: 28
+<b>Last Updated At</b>: 12/03/2021 09:27</pre>
+                        </td>
+                        <td><img src="map-marker.png" alt="Edit Location" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="Edit Location">
+                          <img src="map-direction.png" alt="Get Direction" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="Get Direction"></td>
+                        <td>
+                          <pre>
+<b>Status At</b>: 12/03/2021 09:27
+<b>Load ON/OFF Status</b>:LIGHTS OFF
+<b>Active Alerts</b>:
+<b>Operational mode </b>:</pre>
+                          <img src="refresh.png" alt="Update" data-toggle="tooltip" data-placement="top" title=""
+                            data-original-title="Update"></td>
+                        <td>Updated at:
+                          12/03/2021 09:21
+                          1-Phase
+                          <img src="refresh.png" alt="Update" data-toggle="tooltip" data-placement="top" title=""
+                            data-original-title="Update"></td>
+                        <td><img src="settings.png" alt="Settings" data-toggle="tooltip" data-placement="top" title=""
+                            data-original-title="Settings"></td>
+                        <td><img src="lights.png" alt="View/Edit Lamp Details" data-toggle="tooltip"
+                            data-placement="top" title="" data-original-title="View/Edit Lamp Details"></td>
+                        <td><img src="download.png" alt="Download Excel file" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="Download Excel file">
+                          <img src="mail.png" alt="View Recent Messages" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="View Recent Messages"></td>
+                        <td><img src="download.png" alt="Download Excel file" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="Download Excel file">
+                          <img src="mail.png" alt="View Recent Messages" data-toggle="tooltip" data-placement="top"
+                            title="" data-original-title="View Recent Messages"></td>
+                            <td>RF</td>
+                      </tr>
+                     
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="bdT ta-c p-30 lh-0 fsz-sm c-grey-600"><span>Copyright © 2019 Designed by <a
+            href="https://colorlib.com" target="_blank" title="Colorlib">Colorlib</a>. All rights reserved.</span>
+      </footer>
+    </div>
+  </div>
+  <script type="text/javascript" src="vendor.js"></script>
+  <script type="text/javascript" src="bundle.js"></script>
+</body>
+
+</html>
