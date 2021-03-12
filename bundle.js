@@ -758,7 +758,7 @@ webpackJsonp([0], {
         a.n(o),
             function () {
                 var t = function () {
-                    r("#world-map-marker").length > 0 && (r("#vmap").remove(), r("#world-map-marker").append('\n        <div\n          id="vmap"\n          style="\n            height: 490px;\n            position: relative;\n            overflow: hidden;\n            background-color: transparent;\n          "\n        >\n        </div>\n      '), r("#vmap").googleMap({
+                    r("#world-map-marker").length > 0 && (r("#vmap").remove(), r("#world-map-marker").append('\n        <div\n          id="vmap"\n          style="\n            height: 490px;\n            position: relative;\n            overflow: hidden;\n            background-color: transparent;\n          "\n        >\n        </div>\n      '), r("#vmap").vectorMap({
                         map: "world_mill",
                         backgroundColor: "#fff",
                         borderColor: "#fff",
@@ -816,7 +816,7 @@ webpackJsonp([0], {
     },
     188: function (t, i, a) {
         (function (t) {
-            t.fn.googleMap("addMap", "world_mill", {
+            t.fn.vectorMap("addMap", "world_mill", {
                 insets: [{
                     width: 900,
                     top: 0,
