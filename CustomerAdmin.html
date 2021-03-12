@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-  <title>User Settings</title>
+  <title>Zones/Groups Settings</title>
   <style>
     #loader {
       transition: all .3s ease-in-out;
@@ -84,6 +84,7 @@
     }
   </style>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -258,20 +259,24 @@
       <main class="main-content bgc-grey-100">
         <div id="mainContent">
           <div class="container-fluid">
-            <h4 class="c-grey-900 mT-10 mB-30">User Settings</h4>
+            <h4 class="c-grey-900 mT-10 mB-30">Zones/Groups Settings</h4>
+            
             <div class="row">
+              
               <div class="col-md-12">
+                <button type="button" class="btn cur-p btn-primary" style="margin-bottom: 10px;">Transfer Groups</button><button type="button" class="btn cur-p btn-primary" style="margin-left: 10px;margin-bottom: 10px;">Create Zone</button>
                 <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                  
                   <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                       <tr>
                         <th>SNo.</th>
-                        <th>Group Name</th>
-                        <th>teambhongir<br /><a href="#">Click to Edit</a></th>
-                        <th>Web User 2<br /><a href="#">Click to Edit</a></th>
-                        <th>Web User 3<br /><a href="#">Click to Edit</a></th>
-                        <th>Web User 4<br /><a href="#">Click to Edit</a></th>
-                        <th>Web User 5<br /><a href="#">Click to Edit</a></th>
+                        <th>Zone Name</th>
+                        <th>Edit</th>
+                        <th>Groups</th>
+                        <th>Active Switches</th>
+                        <th>Under Maintenance</th>
+                        <th>Total Switches</th>
                       </tr>
                     </thead>
                     <!-- <tfoot>
@@ -288,73 +293,21 @@
                     <tbody>
                       <tr>
                         <td>1</td>
-                        <td>Bhongir_M321</td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
+                        <td>Bhongir</td>
+                        <td><a href="#"><i class="fa fa-edit" style="font-size:30px;"></i></a></td>
+                        <td>10</td>
+                        <td>165</td>
+                        <td>0</td>
+                        <td>165</td>
                       </tr>
                       <tr>
                         <td>2</td>
-                        <td>Bhongir_M321</td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Bhongir_M321</td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>Bhongir_M321</td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                      </tr>
-                      <tr>
-                        <td>5</td>
-                        <td>Bhongir_M321</td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
-                        <td><input type="checkbox" value="View">&nbsp;View</input><br /><input type="checkbox"
-                            value="View & Control">&nbsp;View & Control</input></td>
+                        <td>Bhongir</td>
+                        <td><a href="#"><i class="fa fa-edit" style="font-size:30px;"></i></a></td>
+                        <td>1</td>
+                        <td>6</td>
+                        <td>0</td>
+                        <td>6</td>
                       </tr>
                     </tbody>
                   </table>
