@@ -76,7 +76,10 @@
     }
 
     #pie_chart span#chartobject-1 {
-      height: 500px !important;
+      height: 341px !important;
+    }
+    #pie_charts span#chartobject-2 {
+      height: 341px !important;
     }
   </style>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -84,9 +87,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
-  <script type="text/javascript"
-    src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
-  <link rel="stylesheet" href="./chart.css">
+  <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
   <link href="style.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -508,6 +509,54 @@
                               <td>$162,700</td>
                             </tr>
                             <tr>
+                              <td>Airi Satou</td>
+                              <td>Accountant</td>
+                              <td>Tokyo</td>
+                              <td>33</td>
+                              <td>2008/11/28</td>
+                              <td>$162,700</td>
+                            </tr>
+                            <tr>
+                              <td>Airi Satou</td>
+                              <td>Accountant</td>
+                              <td>Tokyo</td>
+                              <td>33</td>
+                              <td>2008/11/28</td>
+                              <td>$162,700</td>
+                            </tr>
+                            <tr>
+                              <td>Brielle Williamson</td>
+                              <td>Integration Specialist</td>
+                              <td>New York</td>
+                              <td>61</td>
+                              <td>2012/12/02</td>
+                              <td>$372,000</td>
+                            </tr>
+                            <tr>
+                              <td>Airi Satou</td>
+                              <td>Accountant</td>
+                              <td>Tokyo</td>
+                              <td>33</td>
+                              <td>2008/11/28</td>
+                              <td>$162,700</td>
+                            </tr>
+                            <tr>
+                              <td>Airi Satou</td>
+                              <td>Accountant</td>
+                              <td>Tokyo</td>
+                              <td>33</td>
+                              <td>2008/11/28</td>
+                              <td>$162,700</td>
+                            </tr>
+                            <tr>
+                              <td>Airi Satou</td>
+                              <td>Accountant</td>
+                              <td>Tokyo</td>
+                              <td>33</td>
+                              <td>2008/11/28</td>
+                              <td>$162,700</td>
+                            </tr>
+                            <tr>
                               <td>Brielle Williamson</td>
                               <td>Integration Specialist</td>
                               <td>New York</td>
@@ -564,6 +613,44 @@
                             height: "100%",
                             dataFormat: "json",
                             dataSource
+                          }).render();
+                        });
+                      </script>
+                    </figure>
+                    <figure>
+                      <div id="pie_charts"></div>
+                      <script>
+                        const dataSources = {
+                          chart: {
+                            caption: "Lamp Status",
+                            subcaption: "For all devices in 2021",
+                            showpercentvalues: "1",
+                            defaultcenterlabel: "Device Distribution",
+                            aligncaptionwithcanvas: "0",
+                            captionpadding: "0",
+                            decimals: "1",
+                            plottooltext: "<b>$percentValue</b> of our devices are on <b>$label</b>",
+                            centerlabel: "# Users: $value",
+                            theme: "fusion"
+                          },
+                          data: [{
+                              label: "Auto - OFF",
+                              value: "99.5"
+                            },
+                            {
+                              label: "On CCMS",
+                              value: "0.5"
+                            }
+                          ]
+                        };
+                        FusionCharts.ready(function () {
+                          new FusionCharts({
+                            type: "doughnut2d",
+                            renderAt: "pie_charts",
+                            width: "100%",
+                            height: "100%",
+                            dataFormat: "json",
+                            dataSource:dataSources
                           }).render();
                         });
                       </script>
@@ -777,7 +864,6 @@
       </footer>
     </div>
   </div>
-  <script src="./chart.js"></script>
   <script type="text/javascript" src="vendor.js"></script>
   <script type="text/javascript" src="bundle.js"></script>
 </body>
